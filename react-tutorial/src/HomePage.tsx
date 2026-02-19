@@ -1,25 +1,12 @@
-import { Link } from "react-router";
-
 export default function HomePage() {
   return (
-
     <div>
-    <div>
-      <h1>Home</h1>
-      <Link to="/App" className="btn btn-primary">
-        Go to form
-      </Link>
-      <br></br>
+      <div>
+        <img src="./HomePageBg.png" alt="" />
+        <button className="position-absolute top-50 start-50 translate-middle rounded">
+          Parcourir
+        </button>
+      </div>
     </div>
-
-    </div>
-    
-
-
-
-
-
-
-
   );
 }
