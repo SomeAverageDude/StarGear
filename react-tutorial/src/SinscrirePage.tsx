@@ -1,12 +1,12 @@
 import { Link } from "react-router";
 
-export default function HomePage() {
+export default function SinscrirePage() {
   return (
 
     <div>
     <div>
-      <h1>Home</h1>
-      <Link to="/App" className="btn btn-primary">
+      <h1>S'inscrire</h1>
+      <Link to="/jeuxPage" className="btn btn-primary">
         Go to form
       </Link>
       <br></br>

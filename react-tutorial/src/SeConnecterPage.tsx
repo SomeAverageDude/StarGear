@@ -1,12 +1,12 @@
 import { Link } from "react-router";
 
-export default function HomePage() {
+export default function SeConnecterPage() {
   return (
 
     <div>
     <div>
-      <h1>Home</h1>
-      <Link to="/App" className="btn btn-primary">
+      <h1>Se Connecter</h1>
+      <Link to="/Sinscrire" className="btn btn-primary">
         Go to form
       </Link>
       <br></br>

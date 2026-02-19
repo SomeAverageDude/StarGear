@@ -1,11 +1,11 @@
 import { Link } from "react-router";
 
-export default function HomePage() {
+export default function jeuxPage() {
   return (
 
     <div>
     <div>
-      <h1>Home</h1>
+      <h1>Jeux</h1>
       <Link to="/App" className="btn btn-primary">
         Go to form
       </Link>
@@ -13,13 +13,6 @@ export default function HomePage() {
     </div>
 
     </div>
-    
-
-
-
-
-
-
 
   );
 }
