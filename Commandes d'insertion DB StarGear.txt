@@ -1,0 +1,161 @@
+//In cmd
+docker run -d --name StarGear-Server -p 3307:3307 -e MYSQL_ROOT_PASSWORD=oracle -e MYSQL_DATABASE=StarGear -e MYSQL_USER=scott -e MYSQL_PASSWORD=oracle mysql/mysql-server:latest
+
+//In docker
+mysql -u root -p
+//Mot de passe : oracle
+
+USE StarGear;
+
+//Pour la création des tables
+CREATE TABLE bibliotheque (
+    id_biblio        INTEGER NOT NULL,
+    nb_heure         DECIMAL NOT NULL,
+    date_jouer       DATE,
+    jeux_id_jeu      INTEGER NOT NULL,
+    compte_id_compte INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX bibliotheque__idx ON
+    bibliotheque (
+        compte_id_compte
+    ASC );
+
+ALTER TABLE bibliotheque ADD CONSTRAINT bibliotheque_pk PRIMARY KEY ( id_biblio );
+
+CREATE TABLE compte (
+    id_compte    INTEGER NOT NULL,
+    username     VARCHAR(20) NOT NULL,
+    mot_de_passe VARCHAR(50) NOT NULL,
+    courriel     VARCHAR(50) NOT NULL
+);
+
+ALTER TABLE compte ADD CONSTRAINT compte_pk PRIMARY KEY ( id_compte );
+
+CREATE TABLE droit (
+    id_droit         INTEGER NOT NULL,
+    nom_droit        VARCHAR(20) NOT NULL,
+    description      VARCHAR(100),
+    compte_id_compte INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX droit__idx ON
+    droit (
+        compte_id_compte
+    ASC );
+
+ALTER TABLE droit ADD CONSTRAINT droit_pk PRIMARY KEY ( id_droit );
+
+CREATE TABLE jeux (
+    id_jeu         INTEGER NOT NULL,
+    nom_jeu        VARCHAR(100) NOT NULL,
+    developpeur    VARCHAR(50) NOT NULL,
+    date_de_sortie VARCHAR(20) NOT NULL,
+    prix           DECIMAL NOT NULL,
+    sale           INTEGER NOT NULL,
+    description    VARCHAR(5000) NOT NULL,
+    file_size      DECIMAL NOT NULL,
+    revue_id_revue INTEGER NOT NULL
+);
+
+ALTER TABLE jeux ADD CONSTRAINT jeux_pk PRIMARY KEY ( id_jeu );
+
+CREATE TABLE panier (
+    id_panier        INTEGER NOT NULL,
+    jeux_id_jeu      INTEGER NOT NULL,
+    compte_id_compte INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX panier__idx ON
+    panier (
+        compte_id_compte
+    ASC );
+
+ALTER TABLE panier ADD CONSTRAINT panier_pk PRIMARY KEY ( id_panier );
+
+CREATE TABLE revue (
+    id_revue         INTEGER NOT NULL,
+    valeur           INTEGER NOT NULL,
+    description      VARCHAR(500),
+    compte_id_compte INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX revue__idx ON
+    revue (
+        compte_id_compte
+    ASC );
+
+ALTER TABLE revue ADD CONSTRAINT revue_pk PRIMARY KEY ( id_revue );
+
+CREATE TABLE session (
+    id_session       INTEGER NOT NULL,
+    token            VARCHAR(100) NOT NULL,
+    date_creation    DATE NOT NULL,
+    date_expiration  DATE NOT NULL,
+    ip               INTEGER NOT NULL,
+    compte_id_compte INTEGER NOT NULL
+);
+
+ALTER TABLE session ADD CONSTRAINT session_pk PRIMARY KEY ( id_session );
+
+ALTER TABLE bibliotheque
+    ADD CONSTRAINT bibliotheque_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+ALTER TABLE bibliotheque
+    ADD CONSTRAINT bibliotheque_jeux_fk FOREIGN KEY ( jeux_id_jeu )
+        REFERENCES jeux ( id_jeu );
+
+ALTER TABLE droit
+    ADD CONSTRAINT droit_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+ALTER TABLE jeux
+    ADD CONSTRAINT jeux_revue_fk FOREIGN KEY ( revue_id_revue )
+        REFERENCES revue ( id_revue );
+
+ALTER TABLE panier
+    ADD CONSTRAINT panier_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+ALTER TABLE panier
+    ADD CONSTRAINT panier_jeux_fk FOREIGN KEY ( jeux_id_jeu )
+        REFERENCES jeux ( id_jeu );
+
+ALTER TABLE revue
+    ADD CONSTRAINT revue_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+ALTER TABLE session
+    ADD CONSTRAINT session_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+//Pour les données :
+
+INSERT INTO compte VALUES
+(1, 'compte1', 'pass1', 'test1@email.com'),
+(2, 'compte2', 'pass2', 'test2@email.com'),
+(3, 'compte3', 'pass3', 'test3@email.com');
+
+INSERT INTO revue VALUES
+(1, 4, 'Jeu de survie intense et exigeant.', 1),
+(2, 5, 'Chef-dOeuvre du RPG moderne.', 2),
+(3, 4, 'Expérience horrifique très immersive.', 3);
+
+INSERT INTO jeux VALUES
+(1, 'Rust', 'Facepunch Studios', '2018-02-08', 39.99, 0,
+ 'Jeu de survie multijoueur en monde ouvert centré sur la construction et le PvP.',
+ 25.0, 1),
+
+(2, 'Elden Ring', 'FromSoftware', '2022-02-25', 59.99, 0,
+ 'RPG d''action en monde ouvert avec un univers créé en collaboration avec George R. R. Martin.',
+ 60.0, 2),
+
+(3, 'Outlast', 'Red Barrels', '2013-09-04', 19.99, 50,
+ 'Jeu d''horreur à la première personne dans un asile abandonné.',
+ 5.0, 3);
+
+INSERT INTO bibliotheque VALUES
+(1, 230.5, '2024-05-10', 1, 1),
+(2, 150.0, '2024-06-15', 2, 2),
+(3, 75.3,  '2024-07-20', 3, 3);
