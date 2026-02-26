@@ -6,15 +6,14 @@ export default function SeConnecterPage() {
     <div>
     <div>
       <h1>Se Connecter</h1>
-      <Link to="/Sinscrire" className="btn btn-primary">
+      <Link to="/SeConnecterPage" className="btn btn-primary">
         Go to form
       </Link>
       <br></br>
     </div>
 
     </div>
-    
-
+  
 
 
 

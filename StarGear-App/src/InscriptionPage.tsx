@@ -6,7 +6,7 @@ export default function SinscrirePage() {
     <div>
     <div>
       <h1>S'inscrire</h1>
-      <Link to="/jeuxPage" className="btn btn-primary">
+      <Link to="/SeConnecterPage" className="btn btn-primary">
         Go to form
       </Link>
       <br></br>
@@ -14,12 +14,5 @@ export default function SinscrirePage() {
 
     </div>
     
-
-
-
-
-
-
-
   );
 }
