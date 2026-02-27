@@ -6,7 +6,7 @@ export default function HomePage() {
        <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
       <div className="container-fluid">      
 
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="">
           <img src="/src/img/starGear.png"  style={{marginLeft:"6rem", marginTop:"0.2rem"}} alt="StarGear" height="150" width="auto"  className="logo position-absolute  translate-middle   " />
         </a>
 
