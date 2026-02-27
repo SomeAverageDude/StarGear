@@ -1,14 +1,14 @@
 
-export default function SeConnecterPage() {
-      const style = {
+export default function InscriptionPage() {
+     const style = {
     backgroundImage: `url(${'https://4kwallpapers.com/images/wallpapers/elden-ring-pc-games-playstation-4-playstation-5-xbox-one-3840x2160-7712.jpg'})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundAttachment: "fixed",
     height: "100vh"
   };
-
   return (
+    
     <div style={style}>
       <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
         <div className="container-fluid">
@@ -53,16 +53,31 @@ export default function SeConnecterPage() {
       </nav>
 
       <div className="pt-5 d-flex justify-content-end">
-    <form 
-      className="mt-5 pt-3 rounded-4 ps-4 pe-4"
-      style={{ width: "400px",height: "400px",backgroundColor: "#1a1a1a",marginRight: "200px"}}>
+        <form
+          className="mt-5 pt-3 rounded-4 ps-4 pe-4 container"
+          style={{
+            width: "400px",
+            height: "400px",
+            backgroundColor: "#1a1a1a",
+          }}
+        >
           <h3 className="text-danger text-center fw-semibold pb-4">
-            Connexion
+            Inscription
           </h3>
+          <p className="text-secondary ">
+            {" "}
+            En vous inscrivant, vous acceptez les{" "}
+            <a href="/conditions" style={{ textDecoration: "underline" }}>
+              Conditions d’utilisation
+            </a>{" "}
+            et la{" "}
+            <a href="/confidentialite" style={{ textDecoration: "underline" }}>
+              Politique de confidentialité
+            </a>
+            {" "}
+          </p>
           <div className="mb-3">
-            <div className="text-secondary">
-              Courriel ou numéro de téléphone
-            </div>
+            <div className="text-secondary">Courriel</div>
             <input
               type="email"
               className="form-control bg-dark text-white"
@@ -70,32 +85,19 @@ export default function SeConnecterPage() {
             />
             <div id="emailHelp" className="form-text"></div>
           </div>
-          <div className="mb-3">
-            <h6 className="form-label text-secondary fs-6">Mot de passe</h6>
-            <input
-              type="password"
-              className="form-control bg-dark text-white "
-              id="inputMotDePasse"
-            />
-          </div>
-          <div>
-            <a href="#" className="text-danger">
-              Mot de passe oublié ?
-            </a>
-          </div>
           <div className="pt-3 pb-4 text-center d-grid gap-2 col-9 mx-auto">
             <button
               type="submit"
               className=" rounded-5 btn btn-danger btn-block "
             >
-              Se connecter
+              Créer un compte{" "}
             </button>
           </div>
           <div>
             <p className="text-secondary text-center pt-2">
-              Vous n'avez pas de compte ?{" "}
-              <a href="/InscriptionPage" className="text-danger">
-                Inscrivez-vous
+              Vous avez déjà un compte ?{" "}
+              <a href="/SeConnecterPage" className="text-danger">
+                Connectez-vous
               </a>
             </p>
           </div>
