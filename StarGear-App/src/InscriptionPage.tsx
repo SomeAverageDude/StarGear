@@ -1,8 +1,16 @@
 import { Link } from "react-router";
 
 export default function InscriptionPage() {
+     const style = {
+    backgroundImage: `url(${'https://4kwallpapers.com/images/wallpapers/elden-ring-pc-games-playstation-4-playstation-5-xbox-one-3840x2160-7712.jpg'})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    height: "100vh"
+  };
   return (
-    <div>
+    
+    <div style={style}>
       <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
