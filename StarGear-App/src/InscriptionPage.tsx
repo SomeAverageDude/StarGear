@@ -14,7 +14,7 @@ export default function InscriptionPage() {
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <img
-              src="/src/img/starGear.png"
+              src="/src/assets/starGear.png"
               style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
               alt="StarGear"
               height="150"
