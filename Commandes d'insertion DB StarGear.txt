@@ -46,6 +46,14 @@ CREATE UNIQUE INDEX droit__idx ON
 
 ALTER TABLE droit ADD CONSTRAINT droit_pk PRIMARY KEY ( id_droit );
 
+CREATE TABLE imagesjeux (
+    id_image    INTEGER NOT NULL,
+    lien        VARCHAR(300) NOT NULL,
+    jeux_id_jeu INTEGER NOT NULL
+);
+
+ALTER TABLE imagesjeux ADD CONSTRAINT imagesjeux_pk PRIMARY KEY ( id_image );
+
 CREATE TABLE jeux (
     id_jeu         INTEGER NOT NULL,
     nom_jeu        VARCHAR(100) NOT NULL,
@@ -109,6 +117,10 @@ ALTER TABLE bibliotheque
 ALTER TABLE droit
     ADD CONSTRAINT droit_compte_fk FOREIGN KEY ( compte_id_compte )
         REFERENCES compte ( id_compte );
+
+ALTER TABLE imagesjeux
+    ADD CONSTRAINT imagesjeux_jeux_fk FOREIGN KEY ( jeux_id_jeu )
+        REFERENCES jeux ( id_jeu );
 
 ALTER TABLE jeux
     ADD CONSTRAINT jeux_revue_fk FOREIGN KEY ( revue_id_revue )
