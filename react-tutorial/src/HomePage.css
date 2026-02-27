@@ -1,0 +1,31 @@
+.stargear-navbar {
+  background: linear-gradient(90deg, #800000 0%, rgb(180, 81, 81) 50%, rgb(110, 0, 0) 100%);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.6);
+}
+
+.nav-custom {
+  color: #fff !important;
+  font-weight: 600;
+  letter-spacing: 2px;
+  transition: 0.25s ease;
+}
+
+.nav-custom:hover {
+  color: rgb(255, 43, 43) !important;
+}
+
+.btn-login {
+  background: linear-gradient(180deg, #f71c1c, #990000);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  transition: 0.25s ;
+}
+
+.btn-login:hover {
+  background: linear-gradient(180deg, rgb(255, 43, 43), rgb(193, 0, 0));
+  transform: translateY(-2px);
+  color: #fff;
+}
+
