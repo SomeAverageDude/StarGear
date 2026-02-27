@@ -1,4 +1,3 @@
-import "./connect.css";
 
 export default function SeConnecterPage() {
       const style = {
