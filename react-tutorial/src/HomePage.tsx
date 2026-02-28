@@ -11,10 +11,10 @@ export default function HomePage() {
           <img src="/src/img/starGear.png"  style={{marginLeft:"6rem", marginTop:"0.2rem"}} alt="StarGear" height="150" width="auto"  className="logo position-absolute  translate-middle   " />
         </a>
 
-        <div className="collapse navbar-collapse" id="navMenu">
+        <div className=" navbar-collapse" id="navMenu">
           <ul className="navbar-nav mx-auto text-center gap-lg-4">
             <li className="nav-item">
-              <a className="nav-link nav-custom " href="">
+              <a className="nav-link nav-custom" href="">
                 Accueil
               </a>
             </li>
@@ -39,6 +39,7 @@ export default function HomePage() {
       </div>
     </nav>
 
+
      <footer className="stargear-footer text-center pt-5">
       <div className="container-fluid">
 
@@ -57,10 +58,7 @@ export default function HomePage() {
 
       </div>
     </footer>
-
-
-
-
     </>
+
   );
 }
