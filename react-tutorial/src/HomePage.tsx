@@ -3,6 +3,7 @@ import "./HomePage.css"
 export default function HomePage() {
   return (
     
+    <>
        <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
       <div className="container-fluid">      
 
@@ -38,5 +39,28 @@ export default function HomePage() {
       </div>
     </nav>
 
+     <footer className="stargear-footer text-center pt-5">
+      <div className="container-fluid">
+
+        <p className="footer-text mb-3">
+          Découvrez plus en vous connectant!
+        </p>
+
+        <a href="" className="btn footer-btn mb-4">
+          Se connecter
+        </a>
+
+        <div>
+          <img
+            src="./src/img/starGear.png" alt="StarGear" className="footer-logo "  height="150" width="auto" />
+        </div>
+
+      </div>
+    </footer>
+
+
+
+
+    </>
   );
 }
