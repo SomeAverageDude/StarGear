@@ -15,6 +15,8 @@ export default function InscriptionPage() {
           return () => clearInterval(interval);
         }, []);
 
+        
+
 
      const style = {
     backgroundImage: `url(${images[currentImage]})`,
@@ -23,6 +25,9 @@ export default function InscriptionPage() {
     backgroundAttachment: "fixed",
     height: "100vh"
   };
+
+
+
   return (
     
     <div style={style}>
