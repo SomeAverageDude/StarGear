@@ -11,14 +11,20 @@ app.use(express.json());
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+    // Create connection pool
+    const pool = mysql.createPool({
+        host: "localhost",
+        user: "scott",
+        password: "oracle",
+        database: "StarGear",
+    });
 
 app.post("/inscription", async (req, res) => {
     const { nomUtilisateur, courriel, mdp } = req.body;
-1
     try {
         const [rows] = await pool.execute(
-            "INSERT INTO Compte (username, email, mot_de_passe) VALUES (?, ?, ?)",
-            [nomUtilisateur, courriel, mdp]
+            "INSERT INTO compte (username, mot_de_passe, courriel) VALUES (?, ?, ?)",
+            [nomUtilisateur, mdp, courriel]
         );
         res.status(201).json({message: "Utilisateur créer avec succès!"})
     } catch (error) {
@@ -27,11 +33,5 @@ app.post("/inscription", async (req, res) => {
     }
 });
 
-// Create connection pool
-const pool = mysql.createPool({
-    host: "localhost",
-    user: "scott",
-    password: "oracle",
-    database: "StarGear",
-});
+
 
