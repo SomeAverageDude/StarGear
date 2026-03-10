@@ -73,7 +73,7 @@ export default function InscriptionPage() {
           className="mt-5 pt-3 rounded-4 ps-4 pe-4 container"
           style={{
             width: "400px",
-            height: "400px",
+            height: "500px",
             backgroundColor: "#1a1a1a",
           }}
         >
@@ -93,6 +93,10 @@ export default function InscriptionPage() {
             {" "}
           </p>
           <div className="mb-3">
+            <div className="text-secondary">Nom d'utilisateur</div>
+            <input type="username" className="form-control bg-dark text-white" id="inputUsername" />
+          </div>
+          <div className="mb-3">
             <div className="text-secondary">Courriel</div>
             <input
               type="email"
@@ -100,6 +104,14 @@ export default function InscriptionPage() {
               id="inputEmail"
             />
             <div id="emailHelp" className="form-text"></div>
+          </div>
+          <div className="mb-3">
+            <h6 className="form-label text-secondary fs-6">Mot de passe</h6>
+            <input
+              type="password"
+              className="form-control bg-dark text-white "
+              id="inputMotDePasse"
+            />
           </div>
           <div className="pt-3 pb-4 text-center d-grid gap-2 col-9 mx-auto">
             <button
@@ -110,7 +122,7 @@ export default function InscriptionPage() {
             </button>
           </div>
           <div>
-            <p className="text-secondary text-center pt-2">
+            <p className="text-secondary text-center">
               Vous avez déjà un compte ?{" "}
               <a href="/SeConnecterPage" className="text-danger">
                 Connectez-vous
