@@ -24,10 +24,11 @@ CREATE UNIQUE INDEX bibliotheque__idx ON
 ALTER TABLE bibliotheque ADD CONSTRAINT bibliotheque_pk PRIMARY KEY ( id_biblio );
 
 CREATE TABLE compte (
-    id_compte    INTEGER NOT NULL,
+    id_compte    INTEGER NOT NULL AUTO_INCREMENT,
     username     VARCHAR(20) NOT NULL,
     mot_de_passe VARCHAR(50) NOT NULL,
-    courriel     VARCHAR(50) NOT NULL
+    courriel     VARCHAR(50) NOT NULL,
+    CONSTRAINT compte_pk PRIMARY KEY (id_compte)
 );
 
 ALTER TABLE compte ADD CONSTRAINT compte_pk PRIMARY KEY ( id_compte );
