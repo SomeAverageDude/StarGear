@@ -26,11 +26,22 @@ app.post("/inscription", async (req, res) => {
             "INSERT INTO compte (username, mot_de_passe, courriel) VALUES (?, ?, ?)",
             [nomUtilisateur, mdp, courriel]
         );
-        res.status(201).json({message: "Utilisateur créer avec succès!"})
+        res.status(201).json({message: "Utilisateur créé avec succès!"})
     } catch (error) {
         console.error("Error inserting user:", error);
         res.status(500).json({ error: "Internal server error" });
     }
+});
+
+app.post("/connexion", async (req, res) => {
+  const { courriel, mdp } = req.body;
+    try {
+    const [rows] = await pool.query("SELECT * FROM compte WHERE courriel = ? AND mot_de_passe = ?", [courriel, mdp]);
+    res.status(201).json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Database error" });
+  }
 });
 
 
