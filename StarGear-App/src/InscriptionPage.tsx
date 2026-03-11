@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate  } from "react-router";
 
 export default function InscriptionPage() {
+  const navigate = useNavigate();
   const images = [
     "https://4kwallpapers.com/images/wallpapers/elden-ring-pc-games-playstation-4-playstation-5-xbox-one-3840x2160-7712.jpg",
     "https://cdn.mos.cms.futurecdn.net/KyCj8atGy2hBbN5HXxSGTj.jpg",
@@ -42,8 +44,11 @@ export default function InscriptionPage() {
       body: JSON.stringify(formData),
     })
       .then((res) => res.json())
-      .then((data) =>
+      .then((data) => {
         setFormData({ nomUtilisateur: "", courriel: "", mdp: "" })
+        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+        navigate("/SeConnecterPage");
+      }
       )
       .catch((err) => console.error(err));
   };
