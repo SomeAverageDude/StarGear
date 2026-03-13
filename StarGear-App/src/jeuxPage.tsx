@@ -43,7 +43,30 @@ export default function jeuxPage() {
           </div>
         </div>
       </nav>
-      
+
+      <div className="justify-content-center">
+        <img src="src\assets\starGear.png" alt="Placeholder" height={400}></img>
+        <div className="">
+          <img
+            src="src\assets\starGear.png"
+            alt="Placeholder"
+            height={200}
+            className="col-4"
+          ></img>
+          <img
+            src="src\assets\starGear.png"
+            alt="Placeholder"
+            height={200}
+            className="col-4"
+          ></img>
+          <img
+            src="src\assets\starGear.png"
+            alt="Placeholder"
+            height={200}
+            className="col-4"
+          ></img>
+        </div>
+      </div>
     </div>
   );
 }
