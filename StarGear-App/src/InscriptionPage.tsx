@@ -45,10 +45,13 @@ export default function InscriptionPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setFormData({ nomUtilisateur: "", courriel: "", mdp: "" })
-        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-        navigate("/SeConnecterPage");
-      }
+        if (data.error) {
+          alert(data.error);
+          return;} 
+          setFormData({ nomUtilisateur: "", courriel: "", mdp: "" });
+          alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+          navigate("/SeConnecterPage");
+        }
       )
       .catch((err) => console.error(err));
   };
@@ -119,11 +122,11 @@ export default function InscriptionPage() {
           <p className="text-secondary ">
             {" "}
             En vous inscrivant, vous acceptez les{" "}
-            <a href="/conditions" style={{ textDecoration: "underline" }}>
+            <a style={{ textDecoration: "underline", color: "blue" }}>
               Conditions d’utilisation
             </a>{" "}
             et la{" "}
-            <a href="/confidentialite" style={{ textDecoration: "underline" }}>
+            <a style={{ textDecoration: "underline", color: "blue" }}>
               Politique de confidentialité
             </a>{" "}
           </p>

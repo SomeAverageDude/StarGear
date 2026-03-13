@@ -27,9 +27,13 @@ app.post("/inscription", async (req, res) => {
             [nomUtilisateur, mdp, courriel]
         );
         res.status(201).json({message: "Utilisateur créé avec succès!"})
-    } catch (error) {
-        console.error("Error inserting user:", error);
-        res.status(500).json({ error: "Internal server error" });
+    } catch (error: any) {
+        if (error.code === "ER_DUP_ENTRY") {
+            res.status(409).json({ error: "Ce courriel est déjà utilisé." });
+        } else {
+            console.error("Erreur d'insertion d'Utilisateur:", error);
+            res.status(500).json({ error: "Erreur du serveur" });
+        }
     }
 });
 
@@ -39,8 +43,8 @@ app.post("/connexion", async (req, res) => {
     const [rows] = await pool.query("SELECT * FROM compte WHERE courriel = ? AND mot_de_passe = ?", [courriel, mdp]);
     res.status(201).json(rows);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Database error" });
+    console.error("Erreur de connexion:", error);
+    res.status(500).json({ message: "Erreur de base de données" });
   }
 });
 
