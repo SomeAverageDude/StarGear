@@ -68,7 +68,7 @@ export default function InscriptionPage() {
           <div className="collapse navbar-collapse" id="navMenu">
             <ul className="navbar-nav mx-auto text-center gap-lg-4">
               <li className="nav-item">
-                <a className="nav-link nav-custom text-white " href="">
+                <a className="nav-link nav-custom text-white " href="/">
                   Accueil
                 </a>
               </li>
