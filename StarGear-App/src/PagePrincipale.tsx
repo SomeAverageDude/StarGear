@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 
 type Jeu = {
-    id: number;
-    nom_jeu: string;
-    description: string;
-    prix: number;
-    image_url: string;
-    date_de_sortie: Date;
+  id_jeu: number;
+  nom_jeu: string;
+  description: string;
+  prix: number;
+  date_de_sortie: string;
 };
 
+type Image = {
+  id_image: number;
+  lien: string;
+  jeux_id_jeu: number;
+};
 
 export default function PagePrincipale() {
   const style = {};
   const [jeux, setJeux] = useState<Jeu[]>([]);
-
+  const [images, setImages] = useState<Image[]>([]);
+  /**
+   * Fetch les jeux depuis la BD
+   */
   useEffect(() => {
     fetch("http://localhost:4000/jeux")
       .then((res) => {
@@ -23,6 +30,18 @@ export default function PagePrincipale() {
         return res.json();
       })
       .then((data) => setJeux(data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:4000/images")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch images");
+        }
+        return res.json();
+      })
+      .then((data) => setImages(data))
       .catch((err) => console.error(err));
   }, []);
 
@@ -70,25 +89,47 @@ export default function PagePrincipale() {
         </div>
       </nav>
 
-    <div className="list-group">
-            {jeux.map((jeu) => (
-            <div key={jeu.id} className="list-group-item">
-                <div className="row align-items-center">
-                {/* Game Info */}
-                <div className="col-8">
-                    <h5 className="mb-1">{jeu.nom_jeu}</h5>
-                    <p className="mb-1">{jeu.description}</p>
-                    <p className="mb-1">Prix: {jeu.prix} $</p>
-                    <p className="mb-1">Année de sortie: {new Date(jeu.date_de_sortie).getFullYear()}</p>
-                    <small className="text-muted">{jeu.image_url}</small>
-                </div>
-                </div>
-                </div>
-            ))}</div>
-                
 
 
+
+
+
+
+
+      <div className="container mt-4">
+        <div className="row g-3">
+          {jeux.map((jeu) => {
+            const image = images.find((img) => img.jeux_id_jeu === jeu.id_jeu);
+            return (
+              <div key={jeu.id_jeu} className="col-6 col-md-4 col-lg-3">
+                <div
+                  className="card h-100 border-0"
+                  style={{ backgroundColor: "#1a1a1a" }}
+                >
+                  <img
+                    src={image?.lien}
+                    className="card-img-top"
+                    alt={jeu.nom_jeu}
+                    style={{ height: "150px", objectFit: "cover" }}
+                  />
+                  <div className="card-body p-2">
+                    <h6 className="card-title text-white mb-1">
+                      {jeu.nom_jeu}
+                    </h6>
+                    <p
+                      className="text-secondary mb-1"
+                      style={{ fontSize: "0.75rem" }}
+                    >
+                      {jeu.date_de_sortie}
+                    </p>
+                    <span className="text-danger fw-bold">{jeu.prix} $</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
-function gameCard() {}

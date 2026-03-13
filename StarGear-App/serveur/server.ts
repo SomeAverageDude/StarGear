@@ -59,3 +59,12 @@ app.get("/jeux", async (req, res) => {
     }
 });
 
+app.get("/images", async (req, res) => {
+  try {
+    const [rows] = await pool.execute("SELECT * FROM imagesjeux");
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
