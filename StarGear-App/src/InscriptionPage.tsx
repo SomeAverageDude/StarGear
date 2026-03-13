@@ -1,22 +1,10 @@
-import { useState, useEffect } from "react";
-import { useNavigate  } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import ChangerImageFond from "./helper/ImageCaroussel";
 
 export default function InscriptionPage() {
   const navigate = useNavigate();
-  const images = [
-    "https://4kwallpapers.com/images/wallpapers/elden-ring-pc-games-playstation-4-playstation-5-xbox-one-3840x2160-7712.jpg",
-    "https://cdn.mos.cms.futurecdn.net/KyCj8atGy2hBbN5HXxSGTj.jpg",
-  ];
-
-  const [currentImage, setCurrentImage] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 15000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const currentImage = ChangerImageFond();
 
   const [formData, setFormData] = useState({
     nomUtilisateur: "",
@@ -47,16 +35,16 @@ export default function InscriptionPage() {
       .then((data) => {
         if (data.error) {
           alert(data.error);
-          return;} 
-          setFormData({ nomUtilisateur: "", courriel: "", mdp: "" });
-          alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-          navigate("/SeConnecterPage");
+          return;
         }
-      )
+        setFormData({ nomUtilisateur: "", courriel: "", mdp: "" });
+        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+        navigate("/SeConnecterPage");
+      })
       .catch((err) => console.error(err));
   };
   const style = {
-    backgroundImage: `url(${images[currentImage]})`,
+    backgroundImage: `url(${currentImage})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundAttachment: "fixed",
@@ -108,7 +96,8 @@ export default function InscriptionPage() {
       </nav>
 
       <div className="pt-5 d-flex justify-content-end">
-        <form onSubmit={handleSubmit} 
+        <form
+          onSubmit={handleSubmit}
           className="mt-5 pt-3 rounded-4 ps-4 pe-4 container"
           style={{
             width: "400px",
