@@ -1,5 +1,5 @@
 //In cmd
-docker run -d --name StarGear-Server -p 3307:3307 -e MYSQL_ROOT_PASSWORD=oracle -e MYSQL_DATABASE=StarGear -e MYSQL_USER=scott -e MYSQL_PASSWORD=oracle mysql/mysql-server:latest
+docker run -d --name StarGear-Server -p 3306:3306 -e MYSQL_ROOT_PASSWORD=oracle -e MYSQL_DATABASE=StarGear -e MYSQL_USER=scott -e MYSQL_PASSWORD=oracle mysql/mysql-server:latest
 
 //In docker
 mysql -u root -p
@@ -24,10 +24,10 @@ CREATE UNIQUE INDEX bibliotheque__idx ON
 ALTER TABLE bibliotheque ADD CONSTRAINT bibliotheque_pk PRIMARY KEY ( id_biblio );
 
 CREATE TABLE compte (
-    id_compte    INTEGER NOT NULL,
+    id_compte    INTEGER NOT NULL AUTO_INCREMENT,
     username     VARCHAR(20) NOT NULL,
     mot_de_passe VARCHAR(50) NOT NULL,
-    courriel     VARCHAR(50) NOT NULL
+    courriel     VARCHAR(50) NOT NULL UNIQUE,
 );
 
 ALTER TABLE compte ADD CONSTRAINT compte_pk PRIMARY KEY ( id_compte );

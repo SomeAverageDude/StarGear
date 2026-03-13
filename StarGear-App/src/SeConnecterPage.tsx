@@ -1,11 +1,51 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import ChangerImageFond from "./helper/ImageCaroussel";
 
 export default function SeConnecterPage() {
-      const style = {
-    backgroundImage: `url(${'https://4kwallpapers.com/images/wallpapers/elden-ring-pc-games-playstation-4-playstation-5-xbox-one-3840x2160-7712.jpg'})`,
+  const navigate = useNavigate();
+  const currentImage = ChangerImageFond();
+  const style = {
+    backgroundImage: `url(${[currentImage]})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundAttachment: "fixed",
-    height: "100vh"
+    height: "100vh",
+  };
+
+  const [formData, setFormData] = useState({
+    courriel: "",
+    mdp: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const changedHtmlElement = e.target;
+    setFormData({
+      ...formData,
+      [changedHtmlElement.name]: changedHtmlElement.value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    fetch("http://localhost:4000/connexion", {
+      method: "POST", // Utiliser POST pour envoyer les données de connexion au lieu de GET pour ne pas exposer les informations dans l'URL
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length > 0) {
+          alert("Connexion réussie !");
+          navigate("/");
+        } else {
+          alert("Courriel ou mot de passe incorrect");
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -14,7 +54,7 @@ export default function SeConnecterPage() {
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <img
-              src="/src/img/starGear.png"
+              src="/src/assets/starGear.png"
               style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
               alt="StarGear"
               height="150"
@@ -25,7 +65,7 @@ export default function SeConnecterPage() {
           <div className="collapse navbar-collapse" id="navMenu">
             <ul className="navbar-nav mx-auto text-center gap-lg-4">
               <li className="nav-item">
-                <a className="nav-link nav-custom text-white " href="">
+                <a className="nav-link nav-custom text-white " href="/">
                   Accueil
                 </a>
               </li>
@@ -53,20 +93,28 @@ export default function SeConnecterPage() {
       </nav>
 
       <div className="pt-5 d-flex justify-content-end">
-    <form 
-      className="mt-5 pt-3 rounded-4 ps-4 pe-4"
-      style={{ width: "400px",height: "400px",backgroundColor: "#1a1a1a",marginRight: "200px"}}>
+        <form
+          className="mt-5 pt-3 rounded-4 ps-4 pe-4"
+          onSubmit={handleSubmit}
+          style={{
+            width: "400px",
+            height: "400px",
+            backgroundColor: "#1a1a1a",
+            marginRight: "200px",
+          }}
+        >
           <h3 className="text-danger text-center fw-semibold pb-4">
             Connexion
           </h3>
           <div className="mb-3">
-            <div className="text-secondary">
-              Courriel ou numéro de téléphone
-            </div>
+            <div className="text-secondary">Courriel</div>
             <input
               type="email"
               className="form-control bg-dark text-white"
               id="inputEmail"
+              name="courriel"
+              value={formData.courriel}
+              onChange={handleChange}
             />
             <div id="emailHelp" className="form-text"></div>
           </div>
@@ -74,6 +122,9 @@ export default function SeConnecterPage() {
             <h6 className="form-label text-secondary fs-6">Mot de passe</h6>
             <input
               type="password"
+              name="mdp"
+              value={formData.mdp}
+              onChange={handleChange}
               className="form-control bg-dark text-white "
               id="inputMotDePasse"
             />
