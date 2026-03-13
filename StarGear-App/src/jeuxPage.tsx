@@ -1,8 +1,13 @@
-import { Link } from "react-router";
+const styleBackground = {
+  backgroundImage:
+    "url(https://d8iqbmvu05s9c.cloudfront.net/ajprhqgqg1otf7d5sm7u3brf27gv)",
+  backgroundSize: "cover",
+  height: "100vh",
+};
 
 export default function jeuxPage() {
   return (
-    <div>
+    <div style={styleBackground}>
       <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
@@ -44,26 +49,44 @@ export default function jeuxPage() {
         </div>
       </nav>
 
-      <div className="justify-content-center">
-        <img src="src\assets\starGear.png" alt="Placeholder" height={400}></img>
-        <div className="">
+      <div className="justify-content-center d-flex">
+        <div className="bg-secondary">
           <img
-            src="src\assets\starGear.png"
+            src="src\assets\download.jpg"
             alt="Placeholder"
-            height={200}
-            className="col-4"
+            height={400}
+            width={700}
           ></img>
+
+          <div className="pt-2">
+            <img
+              src="src\assets\download.jpg"
+              alt="Placeholder"
+              height={150}
+              className="col-4 pe-2"
+            ></img>
+            <img
+              src="src\assets\download.jpg"
+              alt="Placeholder"
+              height={150}
+              className="col-4 pe-2"
+            ></img>
+            <img
+              src="src\assets\download.jpg"
+              alt="Placeholder"
+              height={150}
+              className="col-4"
+            ></img>
+          </div>
+        </div>
+
+        <div>
           <img
-            src="src\assets\starGear.png"
+            src="src\assets\download.jpg"
             alt="Placeholder"
-            height={200}
-            className="col-4"
-          ></img>
-          <img
-            src="src\assets\starGear.png"
-            alt="Placeholder"
-            height={200}
-            className="col-4"
+            height={150}
+            width={300}
+            className="ps-4"
           ></img>
         </div>
       </div>
