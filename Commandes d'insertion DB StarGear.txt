@@ -28,7 +28,6 @@ CREATE TABLE compte (
     username     VARCHAR(20) NOT NULL,
     mot_de_passe VARCHAR(50) NOT NULL,
     courriel     VARCHAR(50) NOT NULL UNIQUE,
-    CONSTRAINT compte_pk PRIMARY KEY (id_compte)
 );
 
 ALTER TABLE compte ADD CONSTRAINT compte_pk PRIMARY KEY ( id_compte );
