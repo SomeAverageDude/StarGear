@@ -40,6 +40,13 @@ export default function HomePage() {
     </nav>
 
 
+
+
+
+
+
+
+
      <footer className="stargear-footer text-center pt-5">
       <div className="container-fluid">
 
