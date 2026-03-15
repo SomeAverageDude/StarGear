@@ -50,7 +50,7 @@ app.post("/connexion", async (req, res) => {
 
 app.get("/jeux", async (req, res) => {
     try {
-        const [rows] = await pool.query("SELECT * FROM jeux");
+        const [rows] = await pool.query("SELECT jeux.*, imagesjeux.lien FROM jeux LEFT JOIN imagesjeux ON imagesjeux.jeux_id_jeu = jeux.id_jeu"); // Jointure pour récupérer le lien de l'image
         res.status(200).json(rows);
     }   
     catch (error) {
@@ -58,13 +58,3 @@ app.get("/jeux", async (req, res) => {
         res.status(500).json({ message: "Erreur de base de données" });
     }
 });
-
-app.get("/images", async (req, res) => {
-  try {
-    const [rows] = await pool.execute("SELECT * FROM imagesjeux");
-    res.status(200).json(rows);
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
