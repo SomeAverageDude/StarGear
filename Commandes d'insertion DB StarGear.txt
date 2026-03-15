@@ -61,10 +61,9 @@ CREATE TABLE jeux (
     sale           INTEGER NOT NULL,
     description    VARCHAR(5000) NOT NULL,
     file_size      DECIMAL NOT NULL,
-    revue_id_revue INTEGER NOT NULL
+    revue_id_revue INTEGER NOT NULL,
+    CONSTRAINT jeux_pk PRIMARY KEY (id_jeu)
 );
-
-ALTER TABLE jeux ADD CONSTRAINT jeux_pk PRIMARY KEY ( id_jeu );
 
 CREATE TABLE panier (
     id_panier        INTEGER NOT NULL,
