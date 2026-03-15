@@ -27,7 +27,7 @@ CREATE TABLE compte (
     id_compte    INTEGER NOT NULL AUTO_INCREMENT,
     username     VARCHAR(20) NOT NULL,
     mot_de_passe VARCHAR(50) NOT NULL,
-    courriel     VARCHAR(50) NOT NULL UNIQUE
+    courriel     VARCHAR(50) NOT NULL UNIQUE,
     CONSTRAINT compte_pk PRIMARY KEY (id_compte)
 );
 
@@ -48,12 +48,12 @@ ALTER TABLE droit ADD CONSTRAINT droit_pk PRIMARY KEY ( id_droit );
 CREATE TABLE imagesjeux (
     id_image    INTEGER NOT NULL AUTO_INCREMENT,
     lien        VARCHAR(300) NOT NULL,
-    jeux_id_jeu INTEGER NOT NULL
+    jeux_id_jeu INTEGER NOT NULL,
     CONSTRAINT imagesjeux_pk PRIMARY KEY (id_image) 
 );
 
 CREATE TABLE jeux (
-    id_jeu         INTEGER NOT NULL,
+    id_jeu         INTEGER NOT NULL AUTO_INCREMENT,
     nom_jeu        VARCHAR(100) NOT NULL,
     developpeur    VARCHAR(50) NOT NULL,
     date_de_sortie VARCHAR(20) NOT NULL,
