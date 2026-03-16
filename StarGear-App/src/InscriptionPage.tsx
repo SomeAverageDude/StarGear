@@ -55,7 +55,7 @@ export default function InscriptionPage() {
     <div style={style}>
       <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
         <div className="container-fluid">
-          <a className="navbar-brand" href="/">
+          <a className="navbar-brand" href="#">
             <img
               src="/src/assets/starGear.png"
               style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
@@ -73,7 +73,7 @@ export default function InscriptionPage() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link nav-custom text-white" href="/jeuxPage">
+                <a className="nav-link nav-custom text-white" href="">
                   Boutique
                 </a>
               </li>
