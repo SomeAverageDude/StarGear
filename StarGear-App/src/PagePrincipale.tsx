@@ -1,53 +1,40 @@
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router";
 type Jeu = {
   id_jeu: number;
   nom_jeu: string;
   description: string;
   prix: number;
   date_de_sortie: string;
+  lien: string;
 };
 
-type Image = {
-  id_image: number;
-  lien: string;
-  jeux_id_jeu: number;
-};
 
 export default function PagePrincipale() {
-  const style = {};
   const [jeux, setJeux] = useState<Jeu[]>([]);
-  const [images, setImages] = useState<Image[]>([]);
-  /**
-   * Fetch les jeux depuis la BD
-   */
+const naviguate = useNavigate();
   useEffect(() => {
     fetch("http://localhost:4000/jeux")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch events");
-        }
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => setJeux(data))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Erreur jeux:", err));
+
   }, []);
 
-  useEffect(() => {
-    fetch("http://localhost:4000/images")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch images");
-        }
-        return res.json();
-      })
-      .then((data) => setImages(data))
-      .catch((err) => console.error(err));
-  }, []);
+const style = {
+  backgroundImage: "url(https://cdn.wccftech.com/wp-content/uploads/2017/03/06_1490346163-scaled.jpg)",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundAttachment: "fixed",
+
+};
 
   return (
-    <div style={style}>
-      <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
+    <div
+      className="bg-black text-white min-vh-100"
+   
+    >
+     <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <img
@@ -89,47 +76,154 @@ export default function PagePrincipale() {
         </div>
       </nav>
 
-
-
-
-
-
-
-
-      <div className="container mt-4">
-        <div className="row g-3">
-          {jeux.map((jeu) => {
-            const image = images.find((img) => img.jeux_id_jeu === jeu.id_jeu);
-            return (
-              <div key={jeu.id_jeu} className="col-6 col-md-4 col-lg-3">
-                <div
-                  className="card h-100 border-0"
-                  style={{ backgroundColor: "#1a1a1a" }}
-                >
+      <section
+        className="position-relative d-flex align-items-center justify-content-center"
+        style={{
+          height: "65vh",
+          background:
+            "linear-gradient(180deg, #7a0000 0%, #1a0000 50%, #000 100%)",
+          ...style,
+          paddingTop: "80px",
+        }}
+      >
+        <div className="container">
+          <div className="row g-3 justify-content-center align-items-end" >
+            {jeux.slice(0, 4).map((j, i) => (
+              <div
+                key={j.id_jeu}
+                className="col-3 col-md-2 text-center"
+              >
+                <div className="card bg-transparent border-0 shadow-lg hover-zoom">
                   <img
-                    src={image?.lien}
-                    className="card-img-top"
-                    alt={jeu.nom_jeu}
-                    style={{ height: "150px", objectFit: "cover" }}
+                    src={j.lien}
+                    className="card-img-top rounded-3 border border-secondary"
+                    style={{ height:"350px", objectFit: "cover" }}
+                    alt={j.nom_jeu}
                   />
-                  <div className="card-body p-2">
-                    <h6 className="card-title text-white mb-1">
-                      {jeu.nom_jeu}
-                    </h6>
-                    <p
-                      className="text-secondary mb-1"
-                      style={{ fontSize: "0.75rem" }}
-                    >
-                      {jeu.date_de_sortie}
-                    </p>
-                    <span className="text-danger fw-bold">{jeu.prix} $</span>
+                  <div
+                    className="p-2 small fw-bold text-uppercase text-white"
+                    style={{ fontSize: "10px" }}
+                  >
+                    {j.nom_jeu}
                   </div>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+      <section className="container-fluid p-0">
+        <div className="row g-1">
+          <div className="col-md-6 position-relative overflow-hidden">
+            <img
+              src={jeux[4]?.lien}
+              className="w-100 h-100"
+              style={{ minHeight: "400px", objectFit: "cover" }}
+              alt={jeux[4]?.nom_jeu}
+            />
+            <div className="position-absolute bottom-0 start-0 p-4 bg-gradient-dark w-100">
+              <h2 className="fw-bold m-0">{jeux[4]?.nom_jeu}</h2>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="row g-1">
+              <div className="col-12">
+                <img
+                  src={jeux[5]?.lien}
+                  className="w-100"
+                  style={{ height: "300px", objectFit: "cover" }}
+                  alt="sub-1"
+                />
+              </div>
+              <div className="col-6"
+              onClick={() => naviguate(`/jeuxPage/${6}`)}
+              >
+                <img
+                  src={jeux[6]?.lien}
+                  className="w-100 "
+                  style={{ height: "300px", objectFit: "cover" }}
+                  alt="sub-2"
+                />
+                
+              </div>
+              <div className="col-6">
+                <img
+                  src={jeux[7]?.lien}
+                  className="w-100"
+                  style={{ height: "300px", objectFit: "cover" }}
+                  alt="sub-3"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container my-5 py-5 bg-gradient-dark rounded-4">
+        <h2 className="text-center fw-bold mb-5">Jeux du Moment</h2>
+        <div className="row g-4">
+          <div className="col-lg-5">
+            {jeux.slice(0, 5).map((j) => (
+              <div
+                key={j.id_jeu}
+                className="d-flex align-items-center mb-3 p-2 rounded-3"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 100%)",
+                  border: "1px solid #333",
+                }}
+              >
+                <img
+                  src={j.lien}
+                  className="rounded"
+                  style={{ width: "70px", height: "70px", objectFit: "cover" }}
+                  alt={j.nom_jeu}
+                />
+                <div className="ms-3 flex-grow-1">
+                  <h6 className="m-0 fw-bold">{j.nom_jeu}</h6>
+                  <small className="text-white-50">{j.date_de_sortie}</small>
+                </div>
+                <div className="text-danger fw-bold fs-5 px-3">{j.prix}$</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="col-lg-7">
+            <div className="row g-2">
+              {jeux.slice(5, 9).map((j) => (
+                <div key={j.id_jeu} className="col-6">
+                  <div className="position-relative overflow-hidden rounded-3 shadow">
+                    <img
+                      src={j.lien}
+                      className="w-100"
+                      style={{ height: "185px", objectFit: "cover" }}
+                      alt={j.nom_jeu}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="stargear-footer text-center pt-5">
+        <div className="container-fluid">
+          <p className="footer-text mb-3">Découvrez plus en vous connectant!</p>
+          <a href="" className="btn footer-btn mb-4">
+            Se connecter
+          </a>
+          <div>
+            <img
+              src="./src/img/starGear.png"
+              alt="StarGear"
+              className="footer-logo"
+              height="150"
+              width="auto"
+            />
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
