@@ -5,7 +5,7 @@ export default function HomePage() {
     <div>
       <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-brand" href="/">
             <img
               src="/src/assets/starGear.png"
               style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
@@ -19,12 +19,12 @@ export default function HomePage() {
           <div className="collapse navbar-collapse" id="navMenu">
             <ul className="navbar-nav mx-auto text-center gap-lg-4">
               <li className="nav-item">
-                <a className="nav-link nav-custom " href="">
+                <a className="nav-link nav-custom " href="/">
                   Accueil
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link nav-custom" href="">
+                <a className="nav-link nav-custom" href="/jeuxPage">
                   Boutique
                 </a>
               </li>
@@ -36,7 +36,7 @@ export default function HomePage() {
             </ul>
 
             <div className="d-flex justify-content-center justify-content-lg-end">
-              <a href="" className="btn btn-login">
+              <a href="/SeConnecterPage" className="btn btn-login">
                 Se connecter
               </a>
             </div>

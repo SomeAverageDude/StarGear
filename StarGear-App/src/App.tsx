@@ -4,7 +4,7 @@ export default function Board() {
   return (
     <>
       <p>Basic Message</p>
-      <Link to={"/"}></Link>
+      <Link to={"/SeConnecterPage"}></Link>
     </>
   );
 }
