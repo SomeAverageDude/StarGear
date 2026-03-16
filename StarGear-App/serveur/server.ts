@@ -74,6 +74,8 @@ app.delete("/jeux/:id/delete", async (req,res) => {
         const id = Number(req.params.id);
 
         await pool.query("DELETE FROM bibliotheque WHERE jeux_id_jeu = ?", [id]);
+
+        await pool.query("DELETE FROM imagesjeux WHERE jeux_id_jeu = ?", [id]);
         
         const result = await pool.query("DELETE FROM jeux where id_jeu = ?",[id]);
 
