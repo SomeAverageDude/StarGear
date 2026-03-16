@@ -1,5 +1,5 @@
 //In cmd
-docker run -d --name StarGear-Server -p 3307:3307 -e MYSQL_ROOT_PASSWORD=oracle -e MYSQL_DATABASE=StarGear -e MYSQL_USER=scott -e MYSQL_PASSWORD=oracle mysql/mysql-server:latest
+docker run -d --name StarGear-Server -p 3306:3306 -e MYSQL_ROOT_PASSWORD=oracle -e MYSQL_DATABASE=StarGear -e MYSQL_USER=scott -e MYSQL_PASSWORD=oracle mysql/mysql-server:latest
 
 //In docker
 mysql -u root -p
