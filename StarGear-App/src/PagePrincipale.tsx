@@ -88,7 +88,7 @@ const style = {
       >
         <div className="container">
           <div className="row g-3 justify-content-center align-items-end" >
-            {jeux.slice(0, 4).map((j, i) => (
+            {jeux.slice(0, 4).map((j) => (
               <div
                 key={j.id_jeu}
                 className="col-3 col-md-2 text-center"
