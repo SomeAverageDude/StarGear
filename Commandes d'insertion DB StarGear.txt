@@ -24,10 +24,10 @@ CREATE UNIQUE INDEX bibliotheque__idx ON
 ALTER TABLE bibliotheque ADD CONSTRAINT bibliotheque_pk PRIMARY KEY ( id_biblio );
 
 CREATE TABLE compte (
-    id_compte    INTEGER NOT NULL,
+    id_compte    INTEGER NOT NULL AUTO_INCREMENT,
     username     VARCHAR(20) NOT NULL,
     mot_de_passe VARCHAR(50) NOT NULL,
-    courriel     VARCHAR(50) NOT NULL
+    courriel     VARCHAR(50) NOT NULL UNIQUE,
 );
 
 ALTER TABLE compte ADD CONSTRAINT compte_pk PRIMARY KEY ( id_compte );
@@ -45,6 +45,14 @@ CREATE UNIQUE INDEX droit__idx ON
     ASC );
 
 ALTER TABLE droit ADD CONSTRAINT droit_pk PRIMARY KEY ( id_droit );
+
+CREATE TABLE imagesjeux (
+    id_image    INTEGER NOT NULL,
+    lien        VARCHAR(300) NOT NULL,
+    jeux_id_jeu INTEGER NOT NULL
+);
+
+ALTER TABLE imagesjeux ADD CONSTRAINT imagesjeux_pk PRIMARY KEY ( id_image );
 
 CREATE TABLE jeux (
     id_jeu         INTEGER NOT NULL,
@@ -109,6 +117,10 @@ ALTER TABLE bibliotheque
 ALTER TABLE droit
     ADD CONSTRAINT droit_compte_fk FOREIGN KEY ( compte_id_compte )
         REFERENCES compte ( id_compte );
+
+ALTER TABLE imagesjeux
+    ADD CONSTRAINT imagesjeux_jeux_fk FOREIGN KEY ( jeux_id_jeu )
+        REFERENCES jeux ( id_jeu );
 
 ALTER TABLE jeux
     ADD CONSTRAINT jeux_revue_fk FOREIGN KEY ( revue_id_revue )
