@@ -40,7 +40,7 @@ export default function jeuxPage() {
   const styleBackground: React.CSSProperties = {
     backgroundImage: `url(${images[0]?.lien})`,
     backgroundSize: "cover",
-    height: "100%",
+    height: "100vh",
     overflowX: "hidden",
   };
 
