@@ -54,15 +54,16 @@ export default function InscriptionPage() {
 
   return (
     <div style={style}>
-         <Navbar></Navbar>
+      <Navbar></Navbar>
 
       <div className="pt-5 d-flex justify-content-end">
         <form
           onSubmit={handleSubmit}
-          className="mt-5 pt-3 rounded-4 ps-4 pe-4 container"
+          className="mt-5 pt-3 rounded-4 ps-4 pe-4"
           style={{
             width: "400px",
             height: "500px",
+            marginRight: "200px",
             backgroundColor: "#1a1a1a",
           }}
         >
