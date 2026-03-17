@@ -9,6 +9,8 @@ import SeConnecterPage from "./SeConnecterPage.tsx";
 import InscriptionPage from "./InscriptionPage.tsx";
 import HomePage from "./HomePage.tsx";
 import PagePrincipale from "./PagePrincipale.tsx";
+import AdminPage from "./AdminPage.tsx";
+
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -16,6 +18,7 @@ const router = createBrowserRouter([
   { path: "/SeConnecterPage", element: <SeConnecterPage /> },
   { path: "/InscriptionPage", element: <InscriptionPage /> },
   { path: "/PagePrincipale", element: <PagePrincipale /> },
+  { path: "/AdminPage", element: <AdminPage /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(
