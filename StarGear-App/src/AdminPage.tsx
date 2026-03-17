@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import Navbar from "./helper/navbar";
 type Jeu = {
   id_jeu: number;
   nom_jeu: string;
@@ -80,6 +80,9 @@ export default function AdminPage() {
 
   return (
     <div className="container-fluid mt-4 ">
+
+      <Navbar></Navbar>
+
       <div className="list-group">
         {jeux.map((jeu) => (
           <div key={jeu.id_jeu} className="list-group-item">

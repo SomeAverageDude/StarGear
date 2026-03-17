@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import Navbar from "./helper/navbar";
+import Footer from "./helper/footer"
 type Jeu = {
   id_jeu: number;
   nom_jeu: string;
@@ -9,72 +11,28 @@ type Jeu = {
   lien: string;
 };
 
-
 export default function PagePrincipale() {
   const [jeux, setJeux] = useState<Jeu[]>([]);
-const naviguate = useNavigate();
+  const naviguate = useNavigate();
+
   useEffect(() => {
     fetch("http://localhost:4000/jeux")
       .then((res) => res.json())
-      .then((data) => setJeux(data))
+      .then((data) =>  setJeux(data))
       .catch((err) => console.error("Erreur jeux:", err));
-
   }, []);
 
-const style = {
-  backgroundImage: "url(https://cdn.wccftech.com/wp-content/uploads/2017/03/06_1490346163-scaled.jpg)",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundAttachment: "fixed",
-
-};
+  const style = {
+    backgroundImage:
+      "url(https://cdn.wccftech.com/wp-content/uploads/2017/03/06_1490346163-scaled.jpg)",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+  };
 
   return (
-    <div
-      className="bg-black text-white min-vh-100"
-   
-    >
-     <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            <img
-              src="/src/assets/starGear.png"
-              style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
-              alt="StarGear"
-              height="150"
-              width="auto"
-              className="logo position-absolute  translate-middle   "
-            />
-          </a>
-          <div className="collapse navbar-collapse" id="navMenu">
-            <ul className="navbar-nav mx-auto text-center gap-lg-4">
-              <li className="nav-item">
-                <a className="nav-link nav-custom text-white " href="/">
-                  Accueil
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link nav-custom text-white" href="">
-                  Boutique
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link nav-custom text-white" href="">
-                  À propos
-                </a>
-              </li>
-            </ul>
-            <div className="d-flex justify-content-center justify-content-lg-end">
-              <button
-                type="submit"
-                className=" rounded-5 btn btn-danger btn-block "
-              >
-                Se connecter
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="bg-black text-white min-vh-100">
+     <Navbar></Navbar>
 
       <section
         className="position-relative d-flex align-items-center justify-content-center"
@@ -87,17 +45,19 @@ const style = {
         }}
       >
         <div className="container">
-          <div className="row g-3 justify-content-center align-items-end" >
+          <div className="row g-3 justify-content-center align-items-end">
             {jeux.slice(0, 4).map((j) => (
               <div
                 key={j.id_jeu}
                 className="col-3 col-md-2 text-center"
+                onClick={() => naviguate(`/Jeu/${j.id_jeu}`)}
+                style={{ cursor: "pointer" }}
               >
                 <div className="card bg-transparent border-0 shadow-lg hover-zoom">
                   <img
                     src={j.lien}
                     className="card-img-top rounded-3 border border-secondary"
-                    style={{ height:"350px", objectFit: "cover" }}
+                    style={{ height: "350px", objectFit: "cover" }}
                     alt={j.nom_jeu}
                   />
                   <div
@@ -112,9 +72,14 @@ const style = {
           </div>
         </div>
       </section>
+
       <section className="container-fluid p-0">
         <div className="row g-1">
-          <div className="col-md-6 position-relative overflow-hidden">
+          <div
+            className="col-md-6 position-relative overflow-hidden"
+            onClick={() => naviguate(`/Jeu/${jeux[4]?.id_jeu}`)}
+            style={{ cursor: "pointer" }}
+          >
             <img
               src={jeux[4]?.lien}
               className="w-100 h-100"
@@ -125,9 +90,14 @@ const style = {
               <h2 className="fw-bold m-0">{jeux[4]?.nom_jeu}</h2>
             </div>
           </div>
+
           <div className="col-md-6">
             <div className="row g-1">
-              <div className="col-12">
+              <div
+                className="col-12"
+                onClick={() => naviguate(`/Jeu/${jeux[5]?.id_jeu}`)}
+                style={{ cursor: "pointer" }}
+              >
                 <img
                   src={jeux[5]?.lien}
                   className="w-100"
@@ -135,18 +105,23 @@ const style = {
                   alt="sub-1"
                 />
               </div>
-              <div className="col-6"
-              onClick={() => naviguate(`/jeuxPage/${6}`)}
+              <div
+                className="col-6"
+                onClick={() => naviguate(`/Jeu/${jeux[6]?.id_jeu}`)}
+                style={{ cursor: "pointer" }}
               >
                 <img
                   src={jeux[6]?.lien}
-                  className="w-100 "
+                  className="w-100"
                   style={{ height: "300px", objectFit: "cover" }}
                   alt="sub-2"
                 />
-                
               </div>
-              <div className="col-6">
+              <div
+                className="col-6"
+                onClick={() => naviguate(`/Jeu/${jeux[7]?.id_jeu}`)}
+                style={{ cursor: "pointer" }}
+              >
                 <img
                   src={jeux[7]?.lien}
                   className="w-100"
@@ -167,7 +142,9 @@ const style = {
               <div
                 key={j.id_jeu}
                 className="d-flex align-items-center mb-3 p-2 rounded-3"
+                onClick={() => naviguate(`/Jeu/${j.id_jeu}`)}
                 style={{
+                  cursor: "pointer",
                   background:
                     "linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 100%)",
                   border: "1px solid #333",
@@ -191,7 +168,12 @@ const style = {
           <div className="col-lg-7">
             <div className="row g-2">
               {jeux.slice(5, 9).map((j) => (
-                <div key={j.id_jeu} className="col-6">
+                <div
+                  key={j.id_jeu}
+                  className="col-6"
+                  onClick={() => naviguate(`/Jeu/${j.id_jeu}`)}
+                  style={{ cursor: "pointer" }}
+                >
                   <div className="position-relative overflow-hidden rounded-3 shadow">
                     <img
                       src={j.lien}
@@ -207,23 +189,7 @@ const style = {
         </div>
       </section>
 
-      <footer className="stargear-footer text-center pt-5">
-        <div className="container-fluid">
-          <p className="footer-text mb-3">Découvrez plus en vous connectant!</p>
-          <a href="" className="btn footer-btn mb-4">
-            Se connecter
-          </a>
-          <div>
-            <img
-              src="./src/img/starGear.png"
-              alt="StarGear"
-              className="footer-logo"
-              height="150"
-              width="auto"
-            />
-          </div>
-        </div>
-      </footer>
+     <Footer></Footer>
     </div>
   );
 }
