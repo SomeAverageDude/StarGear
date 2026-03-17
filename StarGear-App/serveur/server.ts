@@ -19,3 +19,37 @@ const pool = mysql.createPool({
     database: "StarGear",
 });
 
+app.get("/jeux", async (req, res) => {
+    try {
+        const [rows] = await pool.query("SELECT * FROM jeux");
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Database error"})
+    }
+});
+
+app.get("/jeux/:id", async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+
+        console.log("params", req.params);
+        console.log("id", id);
+        const [result] = await pool.query("SELECT * FROM jeux WHERE id_jeu = ?", [
+            id,
+        ]);
+
+        const jeu = (result as any[])[0];
+
+        if (!jeu){
+            return res.status(404).json({ message: "Jeu non trouvé" });
+        }
+
+        res.status(200).json(result);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Database error" });
+    }
+});
+
