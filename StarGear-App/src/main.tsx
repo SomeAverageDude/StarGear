@@ -10,7 +10,6 @@ import JeuxPage from "./jeuxPage.tsx";
 import PagePrincipale from "./PagePrincipale.tsx";
 import AdminPage from "./AdminPage.tsx";
 
-
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
   { path: "/Jeu/:id", element: <JeuxPage /> },
