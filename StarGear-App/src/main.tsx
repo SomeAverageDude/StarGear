@@ -11,7 +11,7 @@ import JeuxPage from "./jeuxPage.tsx";
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
   { path: "/App", element: <App /> },
-  { path: "/Jeu", element: <JeuxPage /> },
+  { path: "/Jeu/:id", element: <JeuxPage /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(

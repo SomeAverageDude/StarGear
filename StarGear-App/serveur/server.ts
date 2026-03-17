@@ -32,9 +32,6 @@ app.get("/jeux", async (req, res) => {
 app.get("/jeux/:id", async (req, res) => {
     try {
         const id = Number(req.params.id);
-
-        console.log("params", req.params);
-        console.log("id", id);
         const [result] = await pool.query("SELECT * FROM jeux WHERE id_jeu = ?", [
             id,
         ]);
@@ -50,6 +47,24 @@ app.get("/jeux/:id", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Database error" });
+    }
+});
+app.get("/images/:id", async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const [rows] = await pool.query("SELECT * FROM imagesjeux WHERE jeux_id_jeu = ?", [id]);
+        
+        const image = (rows as any[])[0];
+        if (!image){
+            return res.status(404).json({ message: "Image non trouvé" });
+        }
+
+
+        
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Database error"})
     }
 });
 
