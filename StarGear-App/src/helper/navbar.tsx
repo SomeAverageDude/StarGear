@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3 bg-dark">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="/">
           <img
             src="/src/assets/starGear.png"
             style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
