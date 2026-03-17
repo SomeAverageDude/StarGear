@@ -1,0 +1,181 @@
+//In cmd
+docker run -d --name StarGear-Server -p 3306:3306 -e MYSQL_ROOT_PASSWORD=oracle -e MYSQL_DATABASE=StarGear -e MYSQL_USER=scott -e MYSQL_PASSWORD=oracle mysql/mysql-server:latest
+
+//In docker
+mysql -u root -p
+//Mot de passe : oracle
+
+USE StarGear;
+
+//Pour la création des tables
+CREATE TABLE bibliotheque (
+    id_biblio        INTEGER NOT NULL,
+    nb_heure         DECIMAL NOT NULL,
+    date_jouer       DATE,
+    jeux_id_jeu      INTEGER NOT NULL,
+    compte_id_compte INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX bibliotheque__idx ON
+    bibliotheque (
+        compte_id_compte
+    ASC );
+
+ALTER TABLE bibliotheque ADD CONSTRAINT bibliotheque_pk PRIMARY KEY ( id_biblio );
+
+CREATE TABLE compte (
+    id_compte    INTEGER NOT NULL AUTO_INCREMENT,
+    username     VARCHAR(20) NOT NULL,
+    mot_de_passe VARCHAR(50) NOT NULL,
+    courriel     VARCHAR(50) NOT NULL UNIQUE,
+    CONSTRAINT compte_pk PRIMARY KEY (id_compte)
+);
+
+CREATE TABLE droit (
+    id_droit         INTEGER NOT NULL,
+    nom_droit        VARCHAR(20) NOT NULL,
+    description      VARCHAR(100),
+    compte_id_compte INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX droit__idx ON
+    droit (
+        compte_id_compte
+    ASC );
+
+ALTER TABLE droit ADD CONSTRAINT droit_pk PRIMARY KEY ( id_droit );
+
+CREATE TABLE imagesjeux (
+    id_image    INTEGER NOT NULL AUTO_INCREMENT,
+    lien        VARCHAR(300) NOT NULL,
+    jeux_id_jeu INTEGER NOT NULL,
+    CONSTRAINT imagesjeux_pk PRIMARY KEY (id_image) 
+);
+
+CREATE TABLE jeux (
+    id_jeu         INTEGER NOT NULL AUTO_INCREMENT,
+    nom_jeu        VARCHAR(100) NOT NULL,
+    developpeur    VARCHAR(50) NOT NULL,
+    date_de_sortie VARCHAR(20) NOT NULL,
+    prix           DECIMAL NOT NULL,
+    sale           INTEGER NOT NULL,
+    description    VARCHAR(5000) NOT NULL,
+    file_size      DECIMAL NOT NULL,
+    revue_id_revue INTEGER NOT NULL,
+    CONSTRAINT jeux_pk PRIMARY KEY (id_jeu)
+);
+
+CREATE TABLE panier (
+    id_panier        INTEGER NOT NULL,
+    jeux_id_jeu      INTEGER NOT NULL,
+    compte_id_compte INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX panier__idx ON
+    panier (
+        compte_id_compte
+    ASC );
+
+ALTER TABLE panier ADD CONSTRAINT panier_pk PRIMARY KEY ( id_panier );
+
+CREATE TABLE revue (
+    id_revue         INTEGER NOT NULL,
+    valeur           INTEGER NOT NULL,
+    description      VARCHAR(500),
+    compte_id_compte INTEGER NOT NULL
+);
+
+
+
+ALTER TABLE revue ADD CONSTRAINT revue_pk PRIMARY KEY ( id_revue );
+
+CREATE TABLE session (
+    id_session       INTEGER NOT NULL,
+    token            VARCHAR(100) NOT NULL,
+    date_creation    DATE NOT NULL,
+    date_expiration  DATE NOT NULL,
+    ip               INTEGER NOT NULL,
+    compte_id_compte INTEGER NOT NULL
+);
+
+ALTER TABLE session ADD CONSTRAINT session_pk PRIMARY KEY ( id_session );
+
+ALTER TABLE bibliotheque
+    ADD CONSTRAINT bibliotheque_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+ALTER TABLE bibliotheque
+    ADD CONSTRAINT bibliotheque_jeux_fk FOREIGN KEY ( jeux_id_jeu )
+        REFERENCES jeux ( id_jeu );
+
+ALTER TABLE droit
+    ADD CONSTRAINT droit_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+ALTER TABLE imagesjeux
+    ADD CONSTRAINT imagesjeux_jeux_fk FOREIGN KEY ( jeux_id_jeu )
+        REFERENCES jeux ( id_jeu );
+
+ALTER TABLE jeux
+    ADD CONSTRAINT jeux_revue_fk FOREIGN KEY ( revue_id_revue )
+        REFERENCES revue ( id_revue );
+
+ALTER TABLE panier
+    ADD CONSTRAINT panier_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+ALTER TABLE panier
+    ADD CONSTRAINT panier_jeux_fk FOREIGN KEY ( jeux_id_jeu )
+        REFERENCES jeux ( id_jeu );
+
+ALTER TABLE revue
+    ADD CONSTRAINT revue_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+ALTER TABLE session
+    ADD CONSTRAINT session_compte_fk FOREIGN KEY ( compte_id_compte )
+        REFERENCES compte ( id_compte );
+
+//Pour les données :
+
+INSERT INTO compte VALUES
+(1, 'compte1', 'pass1', 'test1@email.com'),
+(2, 'compte2', 'pass2', 'test2@email.com'),
+(3, 'compte3', 'pass3', 'test3@email.com');
+
+INSERT INTO revue VALUES
+(1, 4, 'Bon jeu', 1),
+(2, 5, 'Chef-d''oeuvre', 1),
+(3, 4, 'Tres immersif', 1),
+(4, 4, 'Effrayant', 1),
+(5, 5, 'Classique intemporel', 1),
+(6, 5, 'RPG magistral', 1),
+(7, 5, 'Emotionnant', 1),
+(8, 3, 'Fun gratuit', 1),
+(9, 5, 'Epic western', 1);
+INSERT INTO jeux VALUES
+(1, 'Rust', 'Facepunch Studios', '2018-02-08', 39.99, 0, 'Jeu de survie multijoueur en monde ouvert centre sur la construction et le PvP.', 25.0, 1),
+(2, 'Elden Ring', 'FromSoftware', '2022-02-25', 59.99, 0, 'RPG d''action en monde ouvert avec un univers cree en collaboration avec George R. R. Martin.', 60.0, 2),
+(3, 'Outlast', 'Red Barrels', '2013-09-04', 19.99, 50, 'Jeu d''horreur a la premiere personne dans un asile abandonne.', 5.0, 3),
+(4, 'Resident Evil Village', 'Capcom', '2021-05-07', 40.00, 0, 'Survie et horreur dans un village maudit.', 35.0, 4),
+(5, 'Minecraft', 'Mojang Studios', '2011-11-18', 30.00, 0, 'Explorez et construisez un monde infini.', 1.0, 5),
+(6, 'The Witcher 3: Wild Hunt', 'CD Projekt Red', '2015-05-19', 39.99, 0, 'RPG en monde ouvert ou vous incarnez Geralt de Riv, un chasseur de monstres professionnel.', 50.0, 6),
+(7, 'The Last of Us Part I', 'Naughty Dog', '2022-09-02', 70.00, 10, 'Une aventure post-apocalyptique emotionnelle.', 75.0, 7),
+(8, 'Brawlhalla', 'Blue Mammoth Games', '2017-10-17', 0.00, 0, 'Un jeu de combat en ligne gratuit.', 2.0, 8),
+(9, 'Red Dead Redemption II', 'Rockstar Games', '2018-10-26', 60.00, 60, 'Une epopee dans le Far West americain.', 120.0, 9);
+
+INSERT INTO imagesjeux (lien, jeux_id_jeu) VALUES
+('https://cdn.cloudflare.steamstatic.com/steam/apps/252490/header.jpg', 1),
+('https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg', 2),
+('https://cdn.cloudflare.steamstatic.com/steam/apps/238320/header.jpg', 3),
+('https://cdn.cloudflare.steamstatic.com/steam/apps/1196590/header.jpg', 4),
+('https://emeaentrepreneur.com/wp-content/uploads/2023/01/Mojang-Studios.jpg', 5),
+('https://image.api.playstation.com/vulcan/ap/rnd/202211/0914/TvcIHkYqqln1RGbaFqBeuFp6.jpg', 6),
+('https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/header.jpg', 7),
+('https://i.ytimg.com/vi/WpPkmplf62A/maxresdefault.jpg', 8),
+('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg?t=1759502961', 9);
+
+INSERT INTO bibliotheque VALUES
+(1, 230.5, '2024-05-10', 1, 1),
+(2, 150.0, '2024-06-15', 2, 2),
+(3, 75.3,  '2024-07-20', 3, 3);
