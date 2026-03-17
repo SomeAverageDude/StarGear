@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import ChangerImageFond from "./helper/ImageCaroussel";
 import Navbar from "./helper/navbar";
-
 export default function SeConnecterPage() {
   const navigate = useNavigate();
   const currentImage = ChangerImageFond();
@@ -51,10 +50,7 @@ export default function SeConnecterPage() {
 
   return (
     <div style={style}>
-
       <Navbar></Navbar>
-
-      
 
       <div className="pt-5 d-flex justify-content-end">
         <form
@@ -116,6 +112,7 @@ export default function SeConnecterPage() {
           </div>
         </form>
       </div>
+   
     </div>
   );
 }

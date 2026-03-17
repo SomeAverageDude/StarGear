@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "./helper/navbar";
-
+import Footer from "./helper/footer"
 type Jeu = {
   id_jeu: number;
   nom_jeu: string;
@@ -189,23 +189,7 @@ export default function PagePrincipale() {
         </div>
       </section>
 
-      <footer className="stargear-footer text-center pt-5">
-        <div className="container-fluid">
-          <p className="footer-text mb-3">Découvrez plus en vous connectant!</p>
-          <a href="" className="btn footer-btn mb-4">
-            Se connecter
-          </a>
-          <div>
-            <img
-              src="./src/img/starGear.png"
-              alt="StarGear"
-              className="footer-logo"
-              height="150"
-              width="auto"
-            />
-          </div>
-        </div>
-      </footer>
+     <Footer></Footer>
     </div>
   );
 }

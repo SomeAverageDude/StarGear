@@ -1,13 +1,13 @@
 import bg from "/src/assets/HomePageBg.png";
 import Navbar from "./helper/navbar";
+import { useNavigate } from "react-router";
+
 export default function HomePage() {
+  const navigate = useNavigate();
+
   return (
     <div>
-      
-      <Navbar>
-        
-      </Navbar>
-
+      <Navbar />
       <div
         style={{
           backgroundImage: `url(${bg})`,
@@ -22,16 +22,15 @@ export default function HomePage() {
           className="position-absolute top-50 start-50 translate-middle text-light"
           style={{ marginTop: -100 }}
         >
-          <span style={{ color: "red" }}>Améliorez</span> votre expérience de
-          jeu
+          <span style={{ color: "red" }}>Améliorez</span> votre expérience de jeu
         </h1>
         <button
           className="position-absolute top-50 start-50 translate-middle rounded-pill border-3 text-light"
+          onClick={() => navigate("/PagePrincipale")}
           style={{
             width: 170,
             height: 45,
-            background:
-              "radial-gradient(rgb(128, 0, 0), rgba(189, 189, 189, 0.73))",
+            background: "radial-gradient(rgb(128, 0, 0), rgba(189, 189, 189, 0.73))",
           }}
         >
           Parcourir les Jeux
@@ -48,12 +47,12 @@ export default function HomePage() {
         </p>
         <button
           className="rounded-pill text-light"
+          onClick={() => navigate("/SeConnecterPage")}
           style={{
             width: 120,
             height: 40,
             marginTop: 10,
-            background:
-              "linear-gradient(to right, rgb(128, 0, 0), rgb(223, 0, 0))",
+            background: "linear-gradient(to right, rgb(128, 0, 0), rgb(223, 0, 0))",
           }}
         >
           Se connecter
@@ -68,4 +67,3 @@ export default function HomePage() {
     </div>
   );
 }
-

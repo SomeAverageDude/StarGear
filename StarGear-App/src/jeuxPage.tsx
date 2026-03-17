@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-
+import Navbar from "./helper/navbar";
+import Footer from "./helper/footer"
 const styleBackground: React.CSSProperties = {
   backgroundImage:
     "url(https://d8iqbmvu05s9c.cloudfront.net/ajprhqgqg1otf7d5sm7u3brf27gv)",
@@ -46,47 +47,7 @@ export default function jeuxPage() {
     <div style={styleBackground}>
       <div className="row justify-content-center d-flex">
 
-        <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3" style={styleBorder}>
-          <div className="container-fluid">
-            <a className="navbar-brand" href="#">
-              <img
-                src="/src/assets/starGear.png"
-                style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
-                alt="StarGear"
-                height="150"
-                width="auto"
-                className="logo position-absolute  translate-middle   "
-              />
-            </a>
-            <div className="collapse navbar-collapse" id="navMenu">
-              <ul className="navbar-nav mx-auto text-center gap-lg-4">
-                <li className="nav-item">
-                  <a className="nav-link nav-custom text-white " href="/">
-                    Accueil
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link nav-custom text-white" href="">
-                    Boutique
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link nav-custom text-white" href="">
-                    À propos
-                  </a>
-                </li>
-              </ul>
-              <div className="d-flex justify-content-center justify-content-lg-end">
-                <button
-                  type="submit"
-                  className=" rounded-5 btn btn-danger btn-block "
-                >
-                  Se connecter
-                </button>
-              </div>
-            </div>
-          </div>
-        </nav>
+      <Navbar></Navbar>
 
         <div className="justify-content-center d-flex row pt-4">
           <div className="ps-2 pt-2 pb-2 col-auto" style={styleBorder}>
@@ -139,6 +100,8 @@ export default function jeuxPage() {
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </div>
+
   );
 }

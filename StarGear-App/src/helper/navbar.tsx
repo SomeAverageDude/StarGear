@@ -22,7 +22,7 @@ export default function Navbar() {
               <a className="nav-link nav-custom text-white" href="/">Accueil</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link nav-custom text-white" href="">Boutique</a>
+              <a className="nav-link nav-custom text-white" href="/PagePrincipale">Boutique</a>
             </li>
             <li className="nav-item">
               <a className="nav-link nav-custom text-white" href="">À propos</a>

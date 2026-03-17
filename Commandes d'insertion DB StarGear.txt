@@ -85,10 +85,7 @@ CREATE TABLE revue (
     compte_id_compte INTEGER NOT NULL
 );
 
-CREATE UNIQUE INDEX revue__idx ON
-    revue (
-        compte_id_compte
-    ASC );
+
 
 ALTER TABLE revue ADD CONSTRAINT revue_pk PRIMARY KEY ( id_revue );
 
@@ -155,8 +152,7 @@ INSERT INTO revue VALUES
 (6, 5, 'RPG magistral', 1),
 (7, 5, 'Emotionnant', 1),
 (8, 3, 'Fun gratuit', 1),
-(9, 5, 'Epic western', 1); 
-
+(9, 5, 'Epic western', 1);
 INSERT INTO jeux VALUES
 (1, 'Rust', 'Facepunch Studios', '2018-02-08', 39.99, 0, 'Jeu de survie multijoueur en monde ouvert centre sur la construction et le PvP.', 25.0, 1),
 (2, 'Elden Ring', 'FromSoftware', '2022-02-25', 59.99, 0, 'RPG d''action en monde ouvert avec un univers cree en collaboration avec George R. R. Martin.', 60.0, 2),
