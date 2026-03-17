@@ -12,11 +12,10 @@ import JeuxPage from "./jeuxPage.tsx";
 import PagePrincipale from "./PagePrincipale.tsx";
 import AdminPage from "./AdminPage.tsx";
 
-
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
   { path: "/App", element: <App /> },
-  { path: "/Jeu", element: <JeuxPage /> },
+  { path: "/Jeu/:id", element: <JeuxPage /> },
   { path: "/SeConnecterPage", element: <SeConnecterPage /> },
   { path: "/InscriptionPage", element: <InscriptionPage /> },
   { path: "/PagePrincipale", element: <PagePrincipale /> },
