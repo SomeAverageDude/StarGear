@@ -60,13 +60,7 @@ app.get("/jeux", async (req, res) => {
     }
 });
 
-        const [rows] = await pool.query("SELECT * FROM jeux");
-        res.status(200).json(rows);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: "Database error"})
-    }
-});
+        
 
 app.get("/jeux/:id", async (req, res) => {
     try {
