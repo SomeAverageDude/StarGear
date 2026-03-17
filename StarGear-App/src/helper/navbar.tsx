@@ -25,7 +25,7 @@ export default function Navbar() {
               <a className="nav-link nav-custom text-white" href="/PagePrincipale">Boutique</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link nav-custom text-white" href="">À propos</a>
+              <a className="nav-link nav-custom text-white" href="/">À propos</a>
             </li>
           </ul>
           <div className="d-flex justify-content-center justify-content-lg-end">

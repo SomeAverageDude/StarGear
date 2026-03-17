@@ -3,19 +3,6 @@ import { useParams } from "react-router";
 
 import Navbar from "./helper/navbar";
 import Footer from "./helper/footer"
-const styleBackground: React.CSSProperties = {
-  backgroundImage:
-    "url(https://d8iqbmvu05s9c.cloudfront.net/ajprhqgqg1otf7d5sm7u3brf27gv)",
-  backgroundSize: "cover",
-  height: "100vh",
-  overflowX: "hidden",
-};
-
-const styleBorder: React.CSSProperties = {
-  backgroundColor: "rgba(112,68,68,0.5)",
-  color: "white",
-};
-
 
 type Jeux = {
   id_jeu: number;
