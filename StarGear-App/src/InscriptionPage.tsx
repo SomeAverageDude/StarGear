@@ -2,18 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import ChangerImageFond from "./helper/ImageCaroussel";
 
-export default function SeConnecterPage() {
+export default function InscriptionPage() {
   const navigate = useNavigate();
   const currentImage = ChangerImageFond();
-  const style = {
-    backgroundImage: `url(${[currentImage]})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundAttachment: "fixed",
-    height: "100vh",
-  };
 
   const [formData, setFormData] = useState({
+    nomUtilisateur: "",
     courriel: "",
     mdp: "",
   });
@@ -27,25 +21,34 @@ export default function SeConnecterPage() {
       [changedHtmlElement.name]: changedHtmlElement.value,
     });
   };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/connexion", {
-      method: "POST", // Utiliser POST pour envoyer les données de connexion au lieu de GET pour ne pas exposer les informations dans l'URL
-      headers: { "Content-Type": "application/json" },
+    fetch("http://localhost:4000/inscription", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(formData),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.length > 0) {
-          alert("Connexion réussie !");
-          navigate("/");
-        } else {
-          alert("Courriel ou mot de passe incorrect");
+        if (data.error) {
+          alert(data.error);
+          return;
         }
+        setFormData({ nomUtilisateur: "", courriel: "", mdp: "" });
+        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+        navigate("/SeConnecterPage");
       })
       .catch((err) => console.error(err));
+  };
+  const style = {
+    backgroundImage: `url(${currentImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    height: "100vh",
   };
 
   return (
@@ -94,25 +97,44 @@ export default function SeConnecterPage() {
 
       <div className="pt-5 d-flex justify-content-end">
         <form
-          className="mt-5 pt-3 rounded-4 ps-4 pe-4"
           onSubmit={handleSubmit}
+          className="mt-5 pt-3 rounded-4 ps-4 pe-4 container"
           style={{
             width: "400px",
-            height: "400px",
+            height: "500px",
             backgroundColor: "#1a1a1a",
-            marginRight: "200px",
           }}
         >
           <h3 className="text-danger text-center fw-semibold pb-4">
-            Connexion
+            Inscription
           </h3>
+          <p className="text-secondary ">
+            {" "}
+            En vous inscrivant, vous acceptez les{" "}
+            <a style={{ textDecoration: "underline", color: "blue" }}>
+              Conditions d’utilisation
+            </a>{" "}
+            et la{" "}
+            <a style={{ textDecoration: "underline", color: "blue" }}>
+              Politique de confidentialité
+            </a>{" "}
+          </p>
+          <div className="mb-3">
+            <div className="text-secondary">Nom d'utilisateur</div>
+            <input
+              type="text"
+              name="nomUtilisateur"
+              className="form-control bg-dark text-white"
+              value={formData.nomUtilisateur}
+              onChange={handleChange}
+            />
+          </div>
           <div className="mb-3">
             <div className="text-secondary">Courriel</div>
             <input
               type="email"
-              className="form-control bg-dark text-white"
-              id="inputEmail"
               name="courriel"
+              className="form-control bg-dark text-white"
               value={formData.courriel}
               onChange={handleChange}
             />
@@ -123,30 +145,24 @@ export default function SeConnecterPage() {
             <input
               type="password"
               name="mdp"
+              className="form-control bg-dark text-white"
               value={formData.mdp}
               onChange={handleChange}
-              className="form-control bg-dark text-white "
-              id="inputMotDePasse"
             />
-          </div>
-          <div>
-            <a href="#" className="text-danger">
-              Mot de passe oublié ?
-            </a>
           </div>
           <div className="pt-3 pb-4 text-center d-grid gap-2 col-9 mx-auto">
             <button
               type="submit"
               className=" rounded-5 btn btn-danger btn-block "
             >
-              Se connecter
+              Créer un compte{" "}
             </button>
           </div>
           <div>
-            <p className="text-secondary text-center pt-2">
-              Vous n'avez pas de compte ?{" "}
-              <a href="/InscriptionPage" className="text-danger">
-                Inscrivez-vous
+            <p className="text-secondary text-center">
+              Vous avez déjà un compte ?{" "}
+              <a href="/SeConnecterPage" className="text-danger">
+                Connectez-vous
               </a>
             </p>
           </div>

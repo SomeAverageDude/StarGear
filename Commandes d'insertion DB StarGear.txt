@@ -1,5 +1,5 @@
 //In cmd
-docker run -d --name StarGear-Server -p 3307:3307 -e MYSQL_ROOT_PASSWORD=oracle -e MYSQL_DATABASE=StarGear -e MYSQL_USER=scott -e MYSQL_PASSWORD=oracle mysql/mysql-server:latest
+docker run -d --name StarGear-Server -p 3306:3306 -e MYSQL_ROOT_PASSWORD=oracle -e MYSQL_DATABASE=StarGear -e MYSQL_USER=scott -e MYSQL_PASSWORD=oracle mysql/mysql-server:latest
 
 //In docker
 mysql -u root -p
@@ -24,13 +24,12 @@ CREATE UNIQUE INDEX bibliotheque__idx ON
 ALTER TABLE bibliotheque ADD CONSTRAINT bibliotheque_pk PRIMARY KEY ( id_biblio );
 
 CREATE TABLE compte (
-    id_compte    INTEGER NOT NULL,
+    id_compte    INTEGER NOT NULL AUTO_INCREMENT,
     username     VARCHAR(20) NOT NULL,
     mot_de_passe VARCHAR(50) NOT NULL,
-    courriel     VARCHAR(50) NOT NULL
+    courriel     VARCHAR(50) NOT NULL UNIQUE,
+    CONSTRAINT compte_pk PRIMARY KEY (id_compte)
 );
-
-ALTER TABLE compte ADD CONSTRAINT compte_pk PRIMARY KEY ( id_compte );
 
 CREATE TABLE droit (
     id_droit         INTEGER NOT NULL,
@@ -46,8 +45,15 @@ CREATE UNIQUE INDEX droit__idx ON
 
 ALTER TABLE droit ADD CONSTRAINT droit_pk PRIMARY KEY ( id_droit );
 
+CREATE TABLE imagesjeux (
+    id_image    INTEGER NOT NULL AUTO_INCREMENT,
+    lien        VARCHAR(300) NOT NULL,
+    jeux_id_jeu INTEGER NOT NULL,
+    CONSTRAINT imagesjeux_pk PRIMARY KEY (id_image) 
+);
+
 CREATE TABLE jeux (
-    id_jeu         INTEGER NOT NULL,
+    id_jeu         INTEGER NOT NULL AUTO_INCREMENT,
     nom_jeu        VARCHAR(100) NOT NULL,
     developpeur    VARCHAR(50) NOT NULL,
     date_de_sortie VARCHAR(20) NOT NULL,
@@ -55,10 +61,9 @@ CREATE TABLE jeux (
     sale           INTEGER NOT NULL,
     description    VARCHAR(5000) NOT NULL,
     file_size      DECIMAL NOT NULL,
-    revue_id_revue INTEGER NOT NULL
+    revue_id_revue INTEGER NOT NULL,
+    CONSTRAINT jeux_pk PRIMARY KEY (id_jeu)
 );
-
-ALTER TABLE jeux ADD CONSTRAINT jeux_pk PRIMARY KEY ( id_jeu );
 
 CREATE TABLE panier (
     id_panier        INTEGER NOT NULL,
@@ -109,6 +114,10 @@ ALTER TABLE bibliotheque
 ALTER TABLE droit
     ADD CONSTRAINT droit_compte_fk FOREIGN KEY ( compte_id_compte )
         REFERENCES compte ( id_compte );
+
+ALTER TABLE imagesjeux
+    ADD CONSTRAINT imagesjeux_jeux_fk FOREIGN KEY ( jeux_id_jeu )
+        REFERENCES jeux ( id_jeu );
 
 ALTER TABLE jeux
     ADD CONSTRAINT jeux_revue_fk FOREIGN KEY ( revue_id_revue )

@@ -7,7 +7,7 @@ export default function HomePage() {
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <img
-              src="/src/img/starGear.png"
+              src="/src/assets/starGear.png"
               style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
               alt="StarGear"
               height="150"
@@ -50,7 +50,7 @@ export default function HomePage() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          height: "130vh",
+          height: "110vh",
           width: "100%",
         }}
       >
@@ -79,19 +79,29 @@ export default function HomePage() {
           background: "linear-gradient(to bottom, black, rgb(128, 0, 0))",
         }}
       >
-        <p className="text-white">Connectez-vous pour l'expérience complète!</p>
+        <p className="text-white fs-5">
+          Connectez-vous pour l'expérience complète!
+        </p>
         <button
           className="rounded-pill text-light"
           style={{
             width: 120,
             height: 40,
+            marginTop: 10,
             background:
               "linear-gradient(to right, rgb(128, 0, 0), rgb(223, 0, 0))",
           }}
         >
           Se connecter
         </button>
+        <br />
+        <img
+          src="src\assets\starGear.png"
+          alt="logo"
+          style={{ width: "40%", height: "160px", objectFit: "cover" }}
+        />
       </div>
     </div>
   );
+}
 }
