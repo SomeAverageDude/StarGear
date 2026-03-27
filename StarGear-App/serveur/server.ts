@@ -60,7 +60,20 @@ app.get("/jeux", async (req, res) => {
     }
 });
 
-        
+  app.get("/jeux/search", async (req,res) => {
+    try{
+        const nom_jeu = (req.query.nom_jeu);
+           if (!nom_jeu) {
+            return res.status(400).json({ message: "Nom du jeu requis" });
+        }
+
+        const [rows] = await pool.query("SELECT * FROM jeux where nom_jeu LIKE ?", [`%${nom_jeu}%`]);
+        res.status(200).json(rows);
+    } catch (error){
+        console.error(error);
+        res.status(500).json({message: "Database error"})
+    }
+});      
 
 app.get("/jeux/:id", async (req, res) => {
     try {
@@ -139,19 +152,5 @@ app.get("/images/:id", async (req, res) => {
 });
 
 
-app.get("/jeux/search", async (req,res) => {
-    try{
-        const nom_jeu = (req.query.nom_jeu);
-           if (!nom_jeu) {
-            return res.status(400).json({ message: "Nom du jeu requis" });
-        }
 
-        const result = await pool.query("SELECT * FROM jeux where nom_jeux LIKE ?", [`%${nom_jeu}%`]);
-        
-        res.status(200).json({result});
-    } catch (error){
-        console.error(error);
-        res.status(500).json({message: "Database error"})
-    }
-});
 
