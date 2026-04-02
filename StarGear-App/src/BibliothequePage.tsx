@@ -5,12 +5,16 @@ export default function BibliothequePage() {
     height: "100vh",
     background: "linear-gradient(180deg, #12171a 60%, #4c0303 100%)",
     overflowX: "hidden",
-    overflowY: "hidden"
+    overflowY: "hidden",
   };
   const sidebar: React.CSSProperties = {
-    height:"100vh",
+    height: "100vh",
     background: "#24282f",
-    overflowY: "scroll"
+    overflowY: "scroll",
+  };
+  const gameButtons: React.CSSProperties = {
+    width: "65%",
+    height: "15%"
   };
   return (
     <div style={gradient}>
@@ -20,18 +24,15 @@ export default function BibliothequePage() {
       <div className="row">
         <div className="col-2 text-center text-white" style={sidebar}>
           <p>test</p>
-          <p>test2</p>
-          <p>test2</p>
-          <p>test2</p>
-          <p>test2</p>
-          <p>test2</p>
-          <p>test2</p>
-          <p>test2</p>
-          <p>test2</p>
         </div>
 
-        <div className="col-10 text-white justify-content-center d-flex">
-          <p>test3</p>
+        <div className="col-10 text-end">
+          <button
+            className="btn btn-outline-danger btn-dark text-white mt-3 me-3"
+            style={gameButtons}
+          >
+            test4
+          </button>
         </div>
       </div>
     </div>
