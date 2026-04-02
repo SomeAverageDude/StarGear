@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "./helper/navbar";
-import Footer from "./helper/footer"
+import Footer from "./helper/footer";
+import SearchBar from "./helper/SearchBar";
 type Jeu = {
   id_jeu: number;
   nom_jeu: string;
@@ -18,7 +19,7 @@ export default function PagePrincipale() {
   useEffect(() => {
     fetch("http://localhost:4000/jeux")
       .then((res) => res.json())
-      .then((data) =>  setJeux(data))
+      .then((data) => setJeux(data))
       .catch((err) => console.error("Erreur jeux:", err));
   }, []);
 
@@ -32,18 +33,22 @@ export default function PagePrincipale() {
 
   return (
     <div className="bg-black text-white min-vh-100">
-     <Navbar></Navbar>
+      <Navbar></Navbar>
 
       <section
-        className="position-relative d-flex align-items-center justify-content-center"
+        className="position-relative d-flex align-items-center flex-column justify-content-center"
         style={{
           height: "65vh",
           background:
             "linear-gradient(180deg, #7a0000 0%, #1a0000 50%, #000 100%)",
           ...style,
-          paddingTop: "80px",
         }}
       >
+        <div className="mb-3 w-100 d-flex justify-content-center ">
+          <div style={{ maxHeight: "70px", width: "100%" }}>
+            <SearchBar />
+          </div>
+        </div>
         <div className="container">
           <div className="row g-3 justify-content-center align-items-end">
             {jeux.slice(0, 4).map((j) => (
@@ -189,7 +194,7 @@ export default function PagePrincipale() {
         </div>
       </section>
 
-     <Footer></Footer>
+      <Footer></Footer>
     </div>
   );
 }
