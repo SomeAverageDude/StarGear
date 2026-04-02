@@ -5,8 +5,7 @@ type Jeu = {
   nom_jeu: string;
   prix: number;
   id_jeu: number;
-    lien: string;
-
+  lien: string;
 };
 
 export default function SearchBar() {
@@ -74,11 +73,17 @@ export default function SearchBar() {
                   borderColor: "#333",
                 }}
               >
-<img
-  src={g.lien}
-  alt={g.nom_jeu}
-  style={{ width: "40px", height: "40px", objectFit: "cover", borderRadius: "4px" }}
-/>                <span>{g.nom_jeu}</span>
+                <img
+                  src={g.lien}
+                  alt={g.nom_jeu}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    objectFit: "cover",
+                    borderRadius: "4px",
+                  }}
+                />{" "}
+                <span>{g.nom_jeu}</span>
                 <span className="fw-bold">{g.prix}$</span>
               </div>
             ))
