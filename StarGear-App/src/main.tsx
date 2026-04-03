@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   { path: "/InscriptionPage", element: <InscriptionPage /> },
   { path: "/PagePrincipale", element: <PagePrincipale /> },
   { path: "/AdminPage", element: <AdminPage /> },
-  { path: "/Bibliotheque", element: <BibliothequePage/>},
+  { path: "/Bibliotheque/:id", element: <BibliothequePage/>},
 ]);
 
 createRoot(document.getElementById("root")!).render(
