@@ -20,10 +20,19 @@ type ImagesJeux = {
   lien: string;
   jeux_id_jeu: number;
 };
+type Compte = {
+  id_compte: number;
+  username: string;
+  mot_de_passe: string;
+  courriel: string;
+  Bibliotheque_id_biblio: number;
+  Panier_id_panier: number;
+}
 
 export default function BibliothequePage() {
   const [jeux, setJeux] = useState<Jeux[]>([]);
   const [images, setImage] = useState<ImagesJeux[]>([]);
+  const [compte, setCompte] = useState<Compte>();
   const { id } = useParams();
 
   useEffect(() => {
@@ -40,6 +49,12 @@ export default function BibliothequePage() {
       .catch((err) => console.error(err));
   }, []);
 
+  useEffect(() => {
+    fetch(`http://localhost:4000/compte/${id}`)
+      .then((res) => res.json())
+      .then((data) => setCompte(data))
+      .catch((err) => console.error(err));
+  });
   const gradient: React.CSSProperties = {
     height: "100vh",
     background: "linear-gradient(180deg, #12171a 60%, #4c0303 100%)",
