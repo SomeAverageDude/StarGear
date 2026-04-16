@@ -1,13 +1,17 @@
 import express from "express";
 import cors from "cors";
 import mysql from "mysql2/promise";
-import dotenv from "dotenv";
-dotenv.config();
 
 const app = express();
+const PORT = 4000;
+
 app.use(cors());
 app.use(express.json());
 
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+// Create connection pool
 const pool = mysql.createPool({
   host: "localhost",
   user: "scott",
@@ -15,146 +19,19 @@ const pool = mysql.createPool({
   database: "StarGear",
 });
 
-const IGDB_CHAMPS = `
-  fields name, summary, cover.image_id,
-         artworks.image_id, screenshots.image_id, videos.video_id,
-         involved_companies.company.name, involved_companies.developer,
-         first_release_date;
-`;
-
-async function igdbFetch(body: string) {
-  const res = await fetch("https://api.igdb.com/v4/games", {
-    method: "POST",
-    headers: {
-      "Client-ID": process.env.IGDB_CLIENT_ID!,
-      "Authorization": `Bearer ${process.env.IGDB_TOKEN}`,
-      "Accept": "application/json",
-    },
-    body,
-  });
-  if (!res.ok) throw new Error(`IGDB error: ${res.status} ${res.statusText}`);
-  return res.json();
-}
-
-function formatGame(game: any) {
-  return {
-    igdb_id:     game.id,
-    nom:         game.name,
-    description: game.summary ?? null,
-    developpeur: game.involved_companies?.find((c: any) => c.developer)?.company?.name ?? null,
-    sortie:      game.first_release_date
-                   ? new Date(game.first_release_date * 1000).toISOString().split("T")[0]
-                   : null,
-    cover:       game.cover?.image_id
-                   ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`
-                   : null,
-    banner:      game.artworks?.[0]?.image_id
-                   ? `https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${game.artworks[0].image_id}.jpg`
-                   : game.screenshots?.[0]?.image_id
-                     ? `https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${game.screenshots[0].image_id}.jpg`
-                     : null,
-    screenshots: game.screenshots?.map((s: any) =>
-                   `https://images.igdb.com/igdb/image/upload/t_screenshot_big/${s.image_id}.jpg`
-                 ) ?? [],
-    videos:      game.videos?.slice(0, 3).map((v: any) =>
-                   `https://www.youtube.com/embed/${v.video_id}`
-                 ) ?? [],
-    prix:        ((game.id % 40) + 9.99).toFixed(2),
-  };
-}
-
-// GET /igdb/jeux
-app.get("/igdb/jeux", async (req, res) => {
-  try {
-    if (req.query.ids) {
-      const ids = (req.query.ids as string).split(",").map(Number).filter(Boolean);
-      if (!ids.length) return res.status(400).json({ message: "IDs invalides" });
-
-      const data = await igdbFetch(`
-        ${IGDB_CHAMPS}
-        where id = (${ids.join(",")});
-        limit ${ids.length};
-      `);
-
-      const map = new Map(data.map((g: any) => [g.id, g]));
-      return res.json(ids.map(id => map.get(id)).filter(Boolean).map(formatGame));
-    }
-
-    const limit  = Math.min(Number(req.query.limit) || 20, 50);
-    const offset = Number(req.query.offset) || 0;
-
-    const data = await igdbFetch(`
-      ${IGDB_CHAMPS}
-      where rating > 75 & cover.image_id != null & rating_count > 50;
-      sort rating_count desc;
-      limit ${limit};
-      offset ${offset};
-    `);
-
-    res.json(data.map(formatGame));
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erreur IGDB" });
-  }
-});
-
-// GET /igdb/jeux/:id
-app.get("/igdb/jeux/:id", async (req, res) => {
-  const id = Number(req.params.id);
-  if (isNaN(id)) return res.status(400).json({ message: "ID invalide" });
-
-  try {
-    const data = await igdbFetch(`${IGDB_CHAMPS} where id = ${id};`);
-    const game = data[0];
-    if (!game) return res.status(404).json({ message: "Jeu introuvable" });
-    if (!game.screenshots?.[0]?.image_id && !game.cover?.image_id) {
-      return res.status(404).json({ message: "Jeu sans image" });
-    }
-    res.json(formatGame(game));
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erreur IGDB" });
-  }
-});
-
-// GET /igdb/search?q=jeu+name
-app.get("/igdb/search", async (req, res) => {
-  const q = (req.query.q as string)?.trim();
-  if (!q) return res.status(400).json({ message: "Paramètre 'q' requis" });
-
-  const limit  = Math.min(Number(req.query.limit) || 20, 50);
-  const offset = Number(req.query.offset) || 0;
-
-  try {
-    const data = await igdbFetch(`
-      search "${q.replace(/"/g, "")}";
-      ${IGDB_CHAMPS}
-      where cover.image_id != null;
-      limit ${limit};
-      offset ${offset};
-    `);
-    res.json(data.map(formatGame));
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erreur IGDB" });
-  }
-});
-
-
-
 app.post("/inscription", async (req, res) => {
   const { nomUtilisateur, courriel, mdp } = req.body;
   try {
-    await pool.execute(
+    const [rows] = await pool.execute(
       "INSERT INTO compte (username, mot_de_passe, courriel) VALUES (?, ?, ?)",
-      [nomUtilisateur, mdp, courriel]
+      [nomUtilisateur, mdp, courriel],
     );
     res.status(201).json({ message: "Utilisateur créé avec succès!" });
   } catch (error: any) {
     if (error.code === "ER_DUP_ENTRY") {
       res.status(409).json({ error: "Ce courriel est déjà utilisé." });
     } else {
-      console.error(error);
+      console.error("Erreur d'insertion d'Utilisateur:", error);
       res.status(500).json({ error: "Erreur du serveur" });
     }
   }
@@ -165,13 +42,137 @@ app.post("/connexion", async (req, res) => {
   try {
     const [rows] = await pool.query(
       "SELECT * FROM compte WHERE courriel = ? AND mot_de_passe = ?",
-      [courriel, mdp]
+      [courriel, mdp],
     );
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
+    res.status(201).json(rows);
+  } catch (error) {
+    console.error("Erreur de connexion:", error);
     res.status(500).json({ message: "Erreur de base de données" });
   }
 });
 
-app.listen(4000, () => console.log("Serveur démarré sur http://localhost:4000"));
+app.get("/jeux", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT jeux.*, imagesjeux.lien FROM jeux LEFT JOIN imagesjeux ON imagesjeux.jeux_id_jeu = jeux.id_jeu",
+    ); // Jointure pour récupérer le lien de l'image
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Erreur de récupération des jeux:", error);
+    res.status(500).json({ message: "Erreur de base de données" });
+  }
+});
+
+app.get("/jeux/search", async (req, res) => {
+  try {
+    const nom_jeu = req.query.nom_jeu;
+    if (!nom_jeu) {
+      return res.status(400).json({ message: "Nom du jeu requis" });
+    }
+
+    const [rows] = await pool.query(
+      "SELECT jeux.*, imagesjeux.lien FROM jeux LEFT JOIN imagesjeux ON imagesjeux.jeux_id_jeu = jeux.id_jeu WHERE jeux.nom_jeu LIKE ?",
+      [`%${nom_jeu}%`],
+    );
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Database error" });
+  }
+});
+
+app.get("/jeux/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    const [result] = await pool.query("SELECT * FROM jeux WHERE id_jeu = ?", [
+      id,
+    ]);
+
+    const jeu = (result as any[])[0];
+
+    if (!jeu) {
+      return res.status(404).json({ message: "Jeu non trouvé" });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Database error" });
+  }
+});
+
+app.put("/jeux/:id/edit", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const {
+      nom_jeu,
+      developpeur,
+      date_de_sortie,
+      prix,
+      sale,
+      description,
+      file_size,
+      revue_id_revue,
+    } = req.body;
+
+    const result = await pool.query(
+      `UPDATE jeux
+            SET nom_jeu = ?, developpeur = ?, date_de_sortie = ?, prix = ?, sale = ?, description = ?, file_size = ?, revue_id_revue = ?
+            WHERE id_jeu = ?`,
+      [
+        nom_jeu,
+        developpeur,
+        date_de_sortie,
+        prix,
+        sale,
+        description,
+        file_size,
+        revue_id_revue,
+        id,
+      ],
+    );
+
+    res.status(200).json({ message: "Jeu modifié" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Database error" });
+  }
+});
+
+app.delete("/jeux/:id/delete", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    await pool.query("DELETE FROM bibliotheque WHERE jeux_id_jeu = ?", [id]);
+
+    await pool.query("DELETE FROM imagesjeux WHERE jeux_id_jeu = ?", [id]);
+
+    const result = await pool.query("DELETE FROM jeux where id_jeu = ?", [id]);
+
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Database error" });
+  }
+});
+
+app.get("/images/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const [rows] = await pool.query(
+      "SELECT * FROM imagesjeux WHERE jeux_id_jeu = ?",
+      [id],
+    );
+
+    const image = (rows as any[])[0];
+    if (!image) {
+      return res.status(404).json({ message: "Image non trouvé" });
+    }
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Database error" });
+  }
+});
