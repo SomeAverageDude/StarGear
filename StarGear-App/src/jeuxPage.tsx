@@ -1,50 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-
 import Navbar from "./helper/navbar";
 import Footer from "./helper/footer";
 
-type Jeux = {
-  id_jeu: number;
-  nom_jeu: string;
-  developpeur: string;
-  date_de_sortie: string;
-  prix: number;
-  sale: number;
+type JeuIGDB = {
+  igdb_id: number;
+  nom: string;
   description: string;
-  file_size: number;
-  revue_id_revue: number;
+  developpeur: string;
+  sortie: string;
+  cover: string;
+  screenshots: string[];
+  videos: string[];
+  prix: number;
 };
 
-type ImagesJeux = {
-  id_image: number;
-  lien: string;
-  jeux_id_jeu: number;
-};
-
-export default function jeuxPage() {
-  const [jeux, setJeux] = useState<Jeux[]>([]);
-  const [images, setImage] = useState<ImagesJeux[]>([]);
-  const { id } = useParams();
+export default function JeuxPage() {
+  const { id } = useParams(); // id = igdb_id
+  const [jeu, setJeu] = useState<JeuIGDB | null>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/jeux/${id}`)
-      .then((res) => res.json())
-      .then((data) => setJeux(data))
-      .catch((err) => console.error(err));
-  }, []);
+    
+    fetch(`http://localhost:4000/igdb/jeux/${id}`)
+      .then(r => r.json())
+      .then(setJeu)
+      .catch(console.error);
+  }, [id]);
 
-  useEffect(() => {
-    fetch(`http://localhost:4000/images/${id}`)
-      .then((res) => res.json())
-      .then((data) => setImage(data))
-      .catch((err) => console.error(err));
-  }, []);
   const styleBackground: React.CSSProperties = {
-    backgroundImage: `url(${images[0]?.lien})`,
+    backgroundImage: `url(${jeu?.screenshots[0] ?? jeu?.cover})`,
     backgroundSize: "cover",
-    height: "100vh",
-    overflowX: "hidden",
+    backgroundAttachment: "fixed",
+    minHeight: "100vh",
   };
 
   const styleBorder: React.CSSProperties = {
@@ -52,8 +39,10 @@ export default function jeuxPage() {
     color: "white",
   };
 
+  if (!jeu) return;
   return (
     <div style={styleBackground}>
+
       <Navbar></Navbar>
       <div className="d-flex container">
         <div
@@ -61,22 +50,35 @@ export default function jeuxPage() {
           style={styleBorder}
         >
           {/* Big image */}
-          <img src={images[0]?.lien} className="col-9 h-75"></img>
+          <img src={jeu.screenshots[0] ?? jeu.cover} alt={jeu.nom} className="col-9 h-75" style={{ objectFit: "cover" }} ></img>
 
           {/* Side image + text */}
           <div className="col-3">
-            <img src={images[0]?.lien} className="h-25" ></img>
-            <label>Par {jeux[0]?.developpeur} en {jeux[0]?.date_de_sortie}</label>
-            <label>Grandeur : {jeux[0]?.file_size} MB</label>
-            <label> {jeux[0]?.description}</label>
+            <img src={jeu.cover} alt={jeu.nom} className="h-25" style={{ objectFit: "cover" }}  ></img>
+            <div style={}>
+            <label>Par {jeu.developpeur} en {jeu.sortie}</label>
+            <label> {jeu.description}</label>
+            </div>
           </div>
         </div>
 
         <div className="row justify-content-center d-flex">
 
         </div>
+        <div className="col-8 mt-3 mb-3">
+          <div className="p-5" style={styleBorder}>
+            <label className="col-9" style={{ fontWeight: "bold", fontSize: 30 }}>
+              Acheter {jeu.nom} à {jeu.prix}$
+
+            </label>
+            <button className="col-auto btn btn-primary btn-dark w-25">
+              Ajouter au panier
+            </button>
+          </div>
+        </div>
       </div>
       <Footer></Footer>
+
     </div>
   );
 }
