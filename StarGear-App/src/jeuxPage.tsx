@@ -56,10 +56,24 @@ export default function jeuxPage() {
     <div style={styleBackground}>
       <Navbar></Navbar>
       <div className="d-flex container">
-        {/* Big image and side */}
-        <div className="row mt-3 pt-2 justify-content-center d-flex" style={styleBorder}>
+        <div
+          className="row mt-3 pt-2 justify-content-center d-flex"
+          style={styleBorder}
+        >
+          {/* Big image */}
           <img src={images[0]?.lien} className="col-9 h-75"></img>
-          <img src={images[0]?.lien} className="col-3 h-25"></img>
+
+          {/* Side image + text */}
+          <div className="col-3">
+            <img src={images[0]?.lien} className="h-25" ></img>
+            <label>Par {jeux[0]?.developpeur} en {jeux[0]?.date_de_sortie}</label>
+            <label>Grandeur : {jeux[0]?.file_size} MB</label>
+            <label> {jeux[0]?.description}</label>
+          </div>
+        </div>
+
+        <div className="row justify-content-center d-flex">
+
         </div>
       </div>
       <Footer></Footer>
