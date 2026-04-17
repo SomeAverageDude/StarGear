@@ -32,7 +32,7 @@ export default function Navbar() {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link nav-custom text-white" href="/">
+              <a className="nav-link nav-custom text-white" href="/AproposPage">
                 À propos
               </a>
             </li>
