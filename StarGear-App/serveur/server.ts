@@ -18,7 +18,7 @@ const pool = mysql.createPool({
 const IGDB_CHAMPS = `
   fields name, summary, cover.image_id,
          artworks.image_id, screenshots.image_id, videos.video_id,
-         involved_companies.company.name, involved_companies.developer,
+         involved_companies.company.name, involved_companies.developer,rating,genres.name,platforms.name,
          first_release_date;
 `;
 
@@ -59,44 +59,60 @@ function formatGame(game: any) {
     videos:      game.videos?.slice(0, 3).map((v: any) =>
                    `https://www.youtube.com/embed/${v.video_id}`
                  ) ?? [],
-    prix:        ((game.id % 40) + 9.99).toFixed(2),
+    prix:        ((game.id % 80) + 9.99).toFixed(2),
+
+    rating:      game.rating ? Math.round(game.rating)/10 : null,
+    genres:      game.genres?.map((g: any) => g.name) ?? [],
+    platforms:   game.platforms?.map((p: any) => p.name) ?? [],
   };
 }
+
+
+
 
 // GET /igdb/jeux
 app.get("/igdb/jeux", async (req, res) => {
   try {
-    if (req.query.ids) {
+    // Permet de récupérer des jeux spécifiques par leurs IDs
+    if(req.query.ids){
       const ids = (req.query.ids as string).split(",").map(Number).filter(Boolean);
-      if (!ids.length) return res.status(400).json({ message: "IDs invalides" });
-
+      if(ids.length === 0) return res.status(400).json({ message: "IDs invalides" });
       const data = await igdbFetch(`
         ${IGDB_CHAMPS}
         where id = (${ids.join(",")});
         limit ${ids.length};
       `);
-
       const map = new Map(data.map((g: any) => [g.id, g]));
       return res.json(ids.map(id => map.get(id)).filter(Boolean).map(formatGame));
     }
 
-    const limit  = Math.min(Number(req.query.limit) || 20, 50);
-    const offset = Number(req.query.offset) || 0;
+
+    const offset = Math.floor(Math.random() * 200); // pour varier les jeux proposés à chaque reload
 
     const data = await igdbFetch(`
       ${IGDB_CHAMPS}
-      where rating > 75 & cover.image_id != null & rating_count > 50;
-      sort rating_count desc;
-      limit ${limit};
+      where cover.image_id != null
+        & screenshots.image_id != null
+        & rating_count > 750;
+      limit 20;
       offset ${offset};
     `);
 
+    if (data.length === 0) {
+      return res.status(500).json({ message: "Aucun jeu trouvé" });
+    }
+
     res.json(data.map(formatGame));
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Erreur IGDB" });
   }
 });
+
+
+
+
 
 // GET /igdb/jeux/:id
 app.get("/igdb/jeux/:id", async (req, res) => {
