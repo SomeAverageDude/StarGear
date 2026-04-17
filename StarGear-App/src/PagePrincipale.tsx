@@ -37,8 +37,14 @@ export default function PagePrincipale() {
   };
 
   return (
-    <div className="bg-black text-white min-vh-100">
-      <Navbar />
+    <div
+      className="bg-black text-white min-vh-100"
+      style={{
+        backgroundImage:
+          "linear-gradient(to bottom, rgba(33, 37, 41, 0) 0%, #212529 80%)",
+      }}
+    >
+      <Navbar></Navbar>
 
      
       <section
