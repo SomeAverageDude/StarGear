@@ -35,16 +35,7 @@ export default function PagePrincipale() {
       .catch(console.error);
     
   }, []);
-// if (loading) {
-//     return (
-//       <div className="d-flex justify-content-center align-items-center min-vh-100">
-//         <div className="spinner-border text-danger" role="status">
-//           <span className="visually-hidden">Chargement...</span>
-//         </div>
-//       </div>
-//     );
-    
-  
+
 
   const style = {
     backgroundImage:
