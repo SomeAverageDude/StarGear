@@ -31,7 +31,7 @@ export default function JeuxPage() {
     backgroundSize: "cover",
     backgroundAttachment: "fixed",
     minHeight: "100vh",
-    overflowX:"hidden"
+    overflowX: "hidden",
   };
 
   const styleBorder: React.CSSProperties = {
@@ -49,12 +49,12 @@ export default function JeuxPage() {
   return (
     <div style={styleBackground}>
       <Navbar></Navbar>
-      <div className="d-flex container">
+      <div className="container">
         <div
           className="row mt-3 pt-2 justify-content-center d-flex"
           style={styleBorder}
         >
-          {/* Big image */}
+          {/* Cover */}
           <img
             src={jeu.screenshots[0] ?? jeu.cover}
             alt={jeu.nom}
@@ -62,13 +62,13 @@ export default function JeuxPage() {
             style={{ objectFit: "cover" }}
           ></img>
 
-          {/* Side image + text */}
+          {/* Coté image + texte */}
           <div className="col-3">
             <img
               src={jeu.cover}
               alt={jeu.nom}
-              className="h-50 w-100"
-              style={{ objectFit: "cover" }}
+              className="w-100"
+              style={{ objectFit: "cover", maxHeight: "200px" }}
             ></img>
             <div style={styleScroll}>
               <label>
@@ -78,7 +78,22 @@ export default function JeuxPage() {
             </div>
           </div>
         </div>
+
+        {/* Sous-images */}
+        <div className="row justify-content-start pb-2 pt-2" style={styleBorder}>
+          {jeu.screenshots.slice(0, 3).map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt={`screenshot ${i}`}
+              className="h-25 w-25"
+              style={{ objectFit: "cover" }}
+            />
+          ))}
+        </div>
       </div>
+
+      {/* Acheter */}
       <div className="row justify-content-center d-flex">
         <div className="col-8 mt-3 mb-3">
           <div className="p-5" style={styleBorder}>
