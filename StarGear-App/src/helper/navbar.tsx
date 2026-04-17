@@ -11,7 +11,7 @@ export default function Navbar() {
             src="/src/assets/starGear.png"
             style={{ marginLeft: "6rem", marginTop: "0.2rem" }}
             alt="StarGear"
-            height="150"
+            height="50px"
             width="auto"
             className="logo position-absolute translate-middle"
           />
