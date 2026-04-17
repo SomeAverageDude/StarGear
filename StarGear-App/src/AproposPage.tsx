@@ -23,6 +23,7 @@ export default function AproposPage() {
           <h2>
             StarGear Vise à donner la meilleur expérience pour les joueurs
           </h2>
+<<<<<<< Updated upstream
           <p className="fs-5">
             Nous créons un sanctuaire pour les gamers : un lieu unique où
             dénicher tous les jeux, qu'il s'agisse de blockbusters ou de perles
@@ -98,6 +99,9 @@ export default function AproposPage() {
           <div className="col-md-3">
             <CasePersonne nom="Yannis Arris" role="CFO" />
           </div>
+=======
+          <p></p>
+>>>>>>> Stashed changes
         </div>
       </div>
       <Footer />
