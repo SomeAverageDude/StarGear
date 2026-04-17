@@ -20,9 +20,8 @@ export default function JeuxPage() {
   const [jeu, setJeu] = useState<JeuIGDB | null>(null);
 
   useEffect(() => {
-    
     fetch(`http://localhost:4000/igdb/jeux/${id}`)
-      .then(r => r.json())
+      .then((r) => r.json())
       .then(setJeu)
       .catch(console.error);
   }, [id]);
@@ -32,6 +31,7 @@ export default function JeuxPage() {
     backgroundSize: "cover",
     backgroundAttachment: "fixed",
     minHeight: "100vh",
+    overflowX:"hidden"
   };
 
   const styleBorder: React.CSSProperties = {
@@ -39,10 +39,15 @@ export default function JeuxPage() {
     color: "white",
   };
 
+  const styleScroll: React.CSSProperties = {
+    overflowY: "scroll",
+    overflowX: "hidden",
+    maxHeight: "300px",
+  };
+
   if (!jeu) return;
   return (
     <div style={styleBackground}>
-
       <Navbar></Navbar>
       <div className="d-flex container">
         <div
@@ -50,26 +55,38 @@ export default function JeuxPage() {
           style={styleBorder}
         >
           {/* Big image */}
-          <img src={jeu.screenshots[0] ?? jeu.cover} alt={jeu.nom} className="col-9 h-75" style={{ objectFit: "cover" }} ></img>
+          <img
+            src={jeu.screenshots[0] ?? jeu.cover}
+            alt={jeu.nom}
+            className="col-9 h-75"
+            style={{ objectFit: "cover" }}
+          ></img>
 
           {/* Side image + text */}
           <div className="col-3">
-            <img src={jeu.cover} alt={jeu.nom} className="h-25" style={{ objectFit: "cover" }}  ></img>
-            <div style={}>
-            <label>Par {jeu.developpeur} en {jeu.sortie}</label>
-            <label> {jeu.description}</label>
+            <img
+              src={jeu.cover}
+              alt={jeu.nom}
+              className="h-50 w-100"
+              style={{ objectFit: "cover" }}
+            ></img>
+            <div style={styleScroll}>
+              <label>
+                Par {jeu.developpeur} en {jeu.sortie}
+              </label>
+              <label> {jeu.description}</label>
             </div>
           </div>
         </div>
-
-        <div className="row justify-content-center d-flex">
-
-        </div>
+      </div>
+      <div className="row justify-content-center d-flex">
         <div className="col-8 mt-3 mb-3">
           <div className="p-5" style={styleBorder}>
-            <label className="col-9" style={{ fontWeight: "bold", fontSize: 30 }}>
+            <label
+              className="col-9"
+              style={{ fontWeight: "bold", fontSize: 30 }}
+            >
               Acheter {jeu.nom} à {jeu.prix}$
-
             </label>
             <button className="col-auto btn btn-primary btn-dark w-25">
               Ajouter au panier
@@ -78,7 +95,6 @@ export default function JeuxPage() {
         </div>
       </div>
       <Footer></Footer>
-
     </div>
   );
 }
