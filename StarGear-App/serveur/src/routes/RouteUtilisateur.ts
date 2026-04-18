@@ -53,9 +53,21 @@ router.post("/Inscription", async (req, res) => {
   try {
     const { courriel, mdp, mdpConfirm, nomUtilisateur } = req.body;
 
+
+    // Validation des champs reçus    
+    if (!courriel || !mdp || !mdpConfirm || !nomUtilisateur) {
+      return res.status(400).json({ message: "Champs manquants" });
+    }
+
+    if (courriel.trim() === "" || nomUtilisateur.trim() === "") {
+      return res.status(400).json({ message: "Champs invalides" });
+    }
+
     // Make sure the received passwords are the same
     if (mdp != mdpConfirm) {
-      return res.status(500).json({ message: "Les mots de passe ne correspondent pas" });
+      return res
+        .status(500)
+        .json({ message: "Les mots de passe ne correspondent pas" });
     }
 
     // Make sure the courriel is not already used
@@ -76,7 +88,9 @@ router.post("/Inscription", async (req, res) => {
     // Register the user in the BD
     const registerResult = await registerUser(getUsers(), user);
     if (!registerResult.acknowledged) {
-      return res.status(500).json({ message: "Erreur de création de l'utilisateur" });
+      return res
+        .status(500)
+        .json({ message: "Erreur de création de l'utilisateur" });
     }
 
     // Create and save refresh token in a safe cookie
@@ -84,7 +98,11 @@ router.post("/Inscription", async (req, res) => {
       registerResult.insertedId,
     );
     if (refreshToken == null) {
-      res.status(500).json({ message: "Erreur lors de l'ajout du token de rafraîchissement" });
+      res
+        .status(500)
+        .json({
+          message: "Erreur lors de l'ajout du token de rafraîchissement",
+        });
     }
     res.cookie("refresh", refreshToken, {
       httpOnly: true,
