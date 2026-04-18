@@ -1,20 +1,38 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
-import mysql from "mysql2/promise";
-import dotenv from "dotenv";
-dotenv.config();
+import userRoutes from "./routes/RouteUtilisateur.js";
+import { config } from "dotenv";
+import { connectToMongo } from "./db/mongo.js";
+
+
+config();
 
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT;
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
+app.use(cookieParser());
 
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "scott",
-  password: "oracle",
-  database: "StarGear",
-});
+app.use("/users", userRoutes);
 
+
+const startServer = async () => {
+  await connectToMongo(process.env.MONGODB_URI!);
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+};
+
+startServer();
 const IGDB_CHAMPS = `
   fields name, summary, cover.image_id,
          artworks.image_id, screenshots.image_id, videos.video_id,
@@ -139,39 +157,3 @@ app.get("/igdb/search", async (req, res) => {
     res.status(500).json({ message: "Erreur IGDB" });
   }
 });
-
-
-
-app.post("/inscription", async (req, res) => {
-  const { nomUtilisateur, courriel, mdp } = req.body;
-  try {
-    await pool.execute(
-      "INSERT INTO compte (username, mot_de_passe, courriel) VALUES (?, ?, ?)",
-      [nomUtilisateur, mdp, courriel]
-    );
-    res.status(201).json({ message: "Utilisateur créé avec succès!" });
-  } catch (error: any) {
-    if (error.code === "ER_DUP_ENTRY") {
-      res.status(409).json({ error: "Ce courriel est déjà utilisé." });
-    } else {
-      console.error(error);
-      res.status(500).json({ error: "Erreur du serveur" });
-    }
-  }
-});
-
-app.post("/connexion", async (req, res) => {
-  const { courriel, mdp } = req.body;
-  try {
-    const [rows] = await pool.query(
-      "SELECT * FROM compte WHERE courriel = ? AND mot_de_passe = ?",
-      [courriel, mdp]
-    );
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erreur de base de données" });
-  }
-});
-
-app.listen(4000, () => console.log("Serveur démarré sur http://localhost:4000"));
