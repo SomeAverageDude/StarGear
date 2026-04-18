@@ -93,7 +93,7 @@ router.post("/Inscription", async (req, res) => {
       secure: false,
     });
 
-    return res.status(201).json({ message: "Inscrit" });
+    return res.status(201).json({ message: "Inscription réussie!" });
   } catch (error) {
     return res.status(500).json({ message: "Erreur de base de données" });
   }

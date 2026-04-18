@@ -23,30 +23,35 @@ export default function InscriptionPage() {
       [changedHtmlElement.name]: changedHtmlElement.value,
     });
   };
- const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  fetch("http://localhost:4000/users/Inscription", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      courriel: formData.courriel,
-      mdp: formData.mdp,
-      mdpConfirm: formData.mdpConfirm,
-      nomUtilisateur: formData.nomUtilisateur,
-    }),
-  })
+    fetch("http://localhost:4000/users/Inscription", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        courriel: formData.courriel,
+        mdp: formData.mdp,
+        mdpConfirm: formData.mdpConfirm,
+        nomUtilisateur: formData.nomUtilisateur,
+      }),
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.message) {
           alert(data.message);
-          return;
+        
         }
-        setFormData({ nomUtilisateur: "", courriel: "", mdp: "", mdpConfirm: "" });
-        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-        navigate("/SeConnecterPage");
+        setFormData({
+          nomUtilisateur: "",
+          courriel: "",
+          mdp: "",
+          mdpConfirm: "",
+        });
+        navigate("/");
       })
       .catch((err) => console.error(err));
   };
@@ -118,8 +123,10 @@ export default function InscriptionPage() {
               onChange={handleChange}
             />
           </div>
-           <div className="mb-3">
-            <h6 className="form-label text-secondary fs-6">Confirmer le mot de passe</h6>
+          <div className="mb-3">
+            <h6 className="form-label text-secondary fs-6">
+              Confirmer le mot de passe
+            </h6>
             <input
               type="password"
               name="mdpConfirm"

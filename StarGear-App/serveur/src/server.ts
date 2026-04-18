@@ -21,18 +21,13 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/users", userRoutes);
+await connectToMongo(process.env.MONGODB_URI!);
 
-
-const startServer = async () => {
-  await connectToMongo(process.env.MONGODB_URI!);
-
-  app.listen(PORT, () => {
+    app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-};
+app.use("/users", userRoutes);
 
-startServer();
 const IGDB_CHAMPS = `
   fields name, summary, cover.image_id,
          artworks.image_id, screenshots.image_id, videos.video_id,
