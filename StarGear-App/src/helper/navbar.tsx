@@ -1,7 +1,26 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+type User = {
+  _id: string;
+  courriel: string;
+  nomUtilisateur: string;
+};
 
 export default function Navbar() {
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:4000/users/me", {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then((data) => setUser(data))
+      .catch(() => setUser(null));
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg stargear-navbar px-4 py-3 bg-dark">
@@ -37,14 +56,32 @@ export default function Navbar() {
               </a>
             </li>
           </ul>
-          <div className="d-flex justify-content-center justify-content-lg-end">
+          {user ? (
+            <div className="d-flex gap-2">
+              <div className="btn btn-outline-light rounded-5">
+                Bonjour, {user.nomUtilisateur}
+              </div>
+
+              <button
+                className="btn btn-danger rounded-5"
+                onClick={() => {
+                  fetch("http://localhost:4000/users/Deconnexion", {
+                    method: "POST",
+                    credentials: "include",
+                  }).then(() => setUser(null));
+                }}
+              >
+                Se déconnecter
+              </button>
+            </div>
+          ) : (
             <button
-              className="rounded-5 btn btn-danger btn-block"
+              className="btn btn-danger rounded-5"
               onClick={() => navigate("/SeConnecterPage")}
             >
               Se connecter
             </button>
-          </div>
+          )}
         </div>
       </div>
     </nav>
