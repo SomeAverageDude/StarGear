@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import ChangerImageFond from "./helper/ImageCaroussel";
 import Navbar from "./helper/navbar";
+import  {toast} from "react-toastify";  
+
+
 export default function SeConnecterPage() {
   const navigate = useNavigate();
   const currentImage = ChangerImageFond();
@@ -40,10 +43,10 @@ export default function SeConnecterPage() {
       .then((res) => res.json())
       .then((data) => {
    if (data.message === "Connected") {
-    alert("Connexion réussie !");
+    toast.success("Connexion réussie !");
     navigate("/");
   } else {
-    alert("Courriel ou mot de passe incorrect");
+    toast.error("Courriel ou mot de passe incorrect");
   }
 })
       .catch((err) => console.error(err));

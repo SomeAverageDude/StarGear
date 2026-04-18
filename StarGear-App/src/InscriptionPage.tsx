@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import ChangerImageFond from "./helper/ImageCaroussel";
 import Navbar from "./helper/navbar";
+import {toast} from "react-toastify";
+ 
 
 export default function InscriptionPage() {
   const navigate = useNavigate();
@@ -42,7 +44,12 @@ export default function InscriptionPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.message) {
-          alert(data.message);
+          if (data.message === "Inscription réussie!") {
+            toast.success(data.message);
+          } else {
+            toast.error(data.message);
+            return;
+          }
         
         }
         setFormData({
