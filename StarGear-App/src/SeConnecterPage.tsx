@@ -31,20 +31,21 @@ export default function SeConnecterPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/connexion", {
+   fetch("http://localhost:4000/users/Connexion", {
       method: "POST", // Utiliser POST pour envoyer les données de connexion au lieu de GET pour ne pas exposer les informations dans l'URL et rendre les params plus faciles a transmettre
       headers: { "Content-Type": "application/json" },
+        credentials: "include",
       body: JSON.stringify(formData),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.length > 0) {
-          alert("Connexion réussie !");
-          navigate("/");
-        } else {
-          alert("Courriel ou mot de passe incorrect");
-        }
-      })
+   if (data.message === "Connected") {
+    alert("Connexion réussie !");
+    navigate("/");
+  } else {
+    alert("Courriel ou mot de passe incorrect");
+  }
+})
       .catch((err) => console.error(err));
   };
 
