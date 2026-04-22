@@ -42,6 +42,7 @@ export default function PagePrincipale() {
       style={{
         backgroundImage:
           "linear-gradient(to bottom, rgba(33, 37, 41, 0) 0%, #212529 80%)",
+          overflowX: "hidden",
       }}
     >
       <Navbar></Navbar>
