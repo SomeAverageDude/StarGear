@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-
+import { toast } from "react-toastify";
 type User = {
   _id: string;
   courriel: string;
@@ -32,7 +32,6 @@ export default function Navbar() {
         />
       </a>
 
-     
       <ul
         className="navbar-nav flex-row gap-4 mb-0"
         style={{
@@ -58,7 +57,6 @@ export default function Navbar() {
         </li>
       </ul>
 
-     
       <div className="ms-auto d-flex gap-2">
         {user ? (
           <>
@@ -71,7 +69,16 @@ export default function Navbar() {
                 fetch("http://localhost:4000/users/Deconnexion", {
                   method: "POST",
                   credentials: "include",
-                }).then(() => setUser(null));
+                })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    if (data.message === "Logged out") {
+                      toast.success("Déconnexion réussie !");
+                      setUser(null);
+                    } else {
+                      toast.error("Erreur lors de la déconnexion");
+                    }
+                  });
               }}
             >
               Se déconnecter
