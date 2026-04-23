@@ -14,12 +14,7 @@ export default function Footer() {
         <p className="footer-text mb-3 text-light">
           Découvrez plus en vous connectant!
         </p>
-        <button
-          className="btn footer-btn mb-4 btn-outline-danger"
-          onClick={() => navigate("/SeConnecterPage")}
-        >
-          Se connecter
-        </button>
+        
         <div>
           <img
             src="/src/assets/starGear.png"
