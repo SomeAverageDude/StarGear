@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { ToastContainer } from "react-toastify";
 import SeConnecterPage from "./SeConnecterPage.tsx";
 import InscriptionPage from "./InscriptionPage.tsx";
 import HomePage from "./HomePage.tsx";
@@ -24,5 +25,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router}></RouterProvider>
+     <ToastContainer position="top-right" autoClose={3000} theme="dark" />
   </StrictMode>,
 );
