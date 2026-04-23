@@ -22,20 +22,17 @@ export default function HomePage() {
       >
         <h1
           className="position-absolute top-50 start-50 translate-middle text-light"
-          style={{ marginTop: -100 }}
+          style={{
+            marginTop: -100,
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+          }}
         >
           <span style={{ color: "red" }}>Améliorez</span> votre expérience de
           jeu
         </h1>
         <button
-          className="position-absolute top-50 start-50 translate-middle rounded-pill border-3 text-light"
+          className="position-absolute top-50 start-50 translate-middle rounded-5 btn btn-danger btn-block"
           onClick={() => navigate("/PagePrincipale")}
-          style={{
-            width: 170,
-            height: 45,
-            background:
-              "radial-gradient(rgb(128, 0, 0), rgba(189, 189, 189, 0.73))",
-          }}
         >
           Parcourir les Jeux
         </button>
