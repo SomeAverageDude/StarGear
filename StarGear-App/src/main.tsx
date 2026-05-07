@@ -11,6 +11,7 @@ import JeuxPage from "./jeuxPage.tsx";
 import PagePrincipale from "./PagePrincipale.tsx";
 import AdminPage from "./AdminPage.tsx";
 import AproposPage from "./AproposPage.tsx";
+import PanierPage from "./PanierPage.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -20,11 +21,12 @@ const router = createBrowserRouter([
   { path: "/PagePrincipale", element: <PagePrincipale /> },
   { path: "/AdminPage", element: <AdminPage /> },
   { path: "AproposPage", element: <AproposPage /> },
+  { path: "/PanierPage", element: <PanierPage /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router}></RouterProvider>
-     <ToastContainer position="top-right" autoClose={3000} theme="dark" />
+    <ToastContainer position="top-right" autoClose={3000} theme="dark" />
   </StrictMode>,
 );
