@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import ChangerImageFond from "./helper/ImageCaroussel";
 import Navbar from "./helper/navbar";
+import {toast} from "react-toastify";
+ 
 
 export default function InscriptionPage() {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ export default function InscriptionPage() {
     nomUtilisateur: "",
     courriel: "",
     mdp: "",
+    mdpConfirm: "",
   });
 
   const handleChange = (
@@ -25,22 +28,37 @@ export default function InscriptionPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/inscription", {
+    fetch("http://localhost:4000/users/Inscription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      credentials: "include",
+      body: JSON.stringify({
+        courriel: formData.courriel,
+        mdp: formData.mdp,
+        mdpConfirm: formData.mdpConfirm,
+        nomUtilisateur: formData.nomUtilisateur,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.error) {
-          alert(data.error);
-          return;
+        if (data.message) {
+          if (data.message === "Inscription réussie!") {
+            toast.success(data.message);
+          } else {
+            toast.error(data.message);
+            return;
+          }
+        
         }
-        setFormData({ nomUtilisateur: "", courriel: "", mdp: "" });
-        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-        navigate("/SeConnecterPage");
+        setFormData({
+          nomUtilisateur: "",
+          courriel: "",
+          mdp: "",
+          mdpConfirm: "",
+        });
+        navigate("/");
       })
       .catch((err) => console.error(err));
   };
@@ -62,7 +80,7 @@ export default function InscriptionPage() {
           className="mt-5 pt-3 rounded-4 ps-4 pe-4"
           style={{
             width: "400px",
-            height: "500px",
+            height: "600px",
             marginRight: "200px",
             backgroundColor: "#1a1a1a",
           }}
@@ -109,6 +127,18 @@ export default function InscriptionPage() {
               name="mdp"
               className="form-control bg-dark text-white"
               value={formData.mdp}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-3">
+            <h6 className="form-label text-secondary fs-6">
+              Confirmer le mot de passe
+            </h6>
+            <input
+              type="password"
+              name="mdpConfirm"
+              className="form-control bg-dark text-white"
+              value={formData.mdpConfirm}
               onChange={handleChange}
             />
           </div>
