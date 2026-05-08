@@ -94,6 +94,12 @@ export default function JeuxPage() {
   }
 }
 
+  const styleScroll: React.CSSProperties = {
+    overflowY: "scroll",
+    overflowX: "hidden",
+    maxHeight: "300px",
+  };
+
   if (!jeu) return;
   return (
     <div style={styleBackground}>
