@@ -4,7 +4,7 @@ export interface Jeu{
     _id?: ObjectId;
     titre: string;
     description: string;
-    prix: string;
+    prix: number;
     genre: string;
     imageurl: string;
 }

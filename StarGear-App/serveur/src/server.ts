@@ -5,6 +5,7 @@ import userRoutes from "./routes/RouteUtilisateur.js";
 import { config } from "dotenv";
 import { connectToMongo } from "./db/mongo.js";
 import igdbRoutes from "./routes/RoutesIGDB.js";
+import panierRoutes from "./routes/RoutesPanier.js";
 
 config();
 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/users", userRoutes);
 app.use("/igdb", igdbRoutes);
+app.use("/panier",panierRoutes);
 
 await connectToMongo(process.env.MONGODB_URI!);
 

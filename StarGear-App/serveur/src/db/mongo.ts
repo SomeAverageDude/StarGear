@@ -1,5 +1,6 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { User } from "../models/utilisateur.js";
+import { Panier } from "../models/panier.js";
 
 let mongoClient: MongoClient;
 
@@ -19,4 +20,8 @@ export function getJwtDb(): Db {
 
 export function getUsers(): Collection<User> {
   return getJwtDb().collection("users");
+}
+
+export function getPaniers(): Collection<Panier>{
+  return getJwtDb().collection("paniers")
 }

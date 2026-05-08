@@ -15,3 +15,36 @@ export async function registerGame(
         {upsert: true}
     );
 }
+
+export async function getPanierByUserId(
+    collection: Collection<Panier>,
+    userId: ObjectId
+): Promise<Panier | null> {
+   return await collection.findOne({userId: userId});
+}
+
+export async function removeGame(
+    collection: Collection<Panier>,
+    userId: ObjectId,
+    gameId: ObjectId,
+): Promise<UpdateResult> {
+   return await collection.updateOne(
+    {userId: userId},
+    {
+        $pull: {jeux:{_id: gameId}},
+        $set: {updatedAt: new Date()}
+    }
+);
+}
+
+export async function clearPanier(
+    collection: Collection<Panier>,
+    userId: ObjectId
+): Promise<UpdateResult> {
+    return await collection.updateOne(
+        { userId: userId },
+        { 
+            $set: { jeux: [], updatedAt: new Date() } 
+        }
+    );
+}
