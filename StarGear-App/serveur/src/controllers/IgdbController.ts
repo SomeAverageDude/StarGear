@@ -1,8 +1,16 @@
 export const IGDB_CHAMPS = `
-  fields name, summary, cover.image_id,
-         artworks.image_id, screenshots.image_id, videos.video_id,
-         involved_companies.company.name, involved_companies.developer,rating,genres.name,platforms.name,
-         first_release_date;
+  fields name,
+   summary,
+    cover.image_id,
+    artworks.image_id, 
+    screenshots.image_id, 
+    videos.video_id,
+    involved_companies.company.name,
+    involved_companies.developer,
+    rating,
+    genres.name,
+    platforms.name,
+    first_release_date;
 `;
 
 

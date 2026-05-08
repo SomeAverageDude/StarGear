@@ -74,16 +74,26 @@ export default function JeuxPage() {
               style={{ objectFit: "cover", maxHeight: "200px" }}
             ></img>
             <div style={styleScroll}>
-              <label>
+              <p>
                 Par {jeu.developpeur} en {jeu.sortie}
-              </label>
-              <label> {jeu.description}</label>
+              </p>
+
+              <p>Note: {jeu.rating}/10</p>
+
+              <p>Genres: {jeu.genres?.join(", ")}</p>
+
+              <p>Plateformes: {jeu.platforms?.join(", ")}</p>
+
+              <p>{jeu.description}</p>
             </div>
           </div>
         </div>
 
         {/* Sous-images */}
-        <div className="row justify-content-start pb-2 pt-2" style={styleBorder}>
+        <div
+          className="row justify-content-start pb-2 pt-2"
+          style={styleBorder}
+        >
           {jeu.screenshots.slice(0, 3).map((url, i) => (
             <img
               key={i}
@@ -93,20 +103,6 @@ export default function JeuxPage() {
               style={{ objectFit: "cover" }}
             />
           ))}
-          {/* Infos */}
-          <div className="pt-2 ps-2 col-3" style={styleBorder}>
-            <img src={jeu.cover} alt={jeu.nom} height={350} width={280} style={{ objectFit: "cover" }} />
-            <label>
-              Par {jeu.developpeur} en {jeu.sortie}
-              <br />
-              Note: {jeu.rating}/10
-              <br />
-              Genres: {jeu.genres?.join(", ")}
-              <br />
-              Plateformes: {jeu.platforms?.join(", ")}
-              <br />{jeu.description}
-            </label>
-          </div>
         </div>
       </div>
 
