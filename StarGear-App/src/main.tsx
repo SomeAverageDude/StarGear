@@ -11,6 +11,7 @@ import JeuxPage from "./jeuxPage.tsx";
 import PagePrincipale from "./PagePrincipale.tsx";
 import AdminPage from "./AdminPage.tsx";
 import AproposPage from "./AproposPage.tsx";
+import AdminGamesPage from "./AdminPageJeux.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -19,7 +20,8 @@ const router = createBrowserRouter([
   { path: "/InscriptionPage", element: <InscriptionPage /> },
   { path: "/PagePrincipale", element: <PagePrincipale /> },
   { path: "/AdminPage", element: <AdminPage /> },
-  { path: "AproposPage", element: <AproposPage /> },
+  { path: "/AproposPage", element: <AproposPage /> },
+  { path: "/AdminPageJeux", element: <AdminGamesPage /> }
 ]);
 
 createRoot(document.getElementById("root")!).render(
