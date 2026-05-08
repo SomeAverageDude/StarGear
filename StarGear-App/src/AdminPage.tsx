@@ -1,248 +1,164 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import Navbar from "./helper/navbar";
-type Jeu = {
-  id_jeu: number;
-  nom_jeu: string;
-  developpeur: string;
-  date_de_sortie: string;
-  prix: number;
-  sale: number;
-  description: string;
-  file_size: number;
-  revue_id_revue: number;
+import Footer from "./helper/footer";
+import { useNavigate } from "react-router";
+
+type User = {
+  _id: string;
+  courriel: string;
+  nomUtilisateur: string;
+  role?: string;
 };
 
-export default function AdminPage() {
-  const [jeux, setJeux] = useState<Jeu[]>([]);
-  const [modifierJeu, setModifierJeu] = useState<Jeu | null>(null);
-  const [formJeu, setFormJeu] = useState<Partial<Jeu> | null>(null);
+const USERS_PER_PAGE = 8;
+const API = "http://localhost:4000/users";
+
+export default function AdminUsersPage() {
+  const navigate = useNavigate();
+  const [users, setUsers] = useState<User[]>([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [editing, setEditing] = useState<User | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:4000/jeux")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch jeux");
-        }
-        return res.json();
-      })
-      .then((data) => setJeux(data))
-      .catch((err) => console.error(err));
+    fetch(API, { credentials: "include" })
+      .then((r) => r.json())
+      .then((data) => Array.isArray(data) ? setUsers(data) : toast.error(data.message ?? "Erreur"))
+      .catch(() => toast.error("Erreur réseau"));
   }, []);
 
-  const handleDelete = (id: number) => {
-    fetch(`http://localhost:4000/jeux/${id}/delete`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to delete jeu");
-        }
+  const filtered = users.filter((u) =>
+    `${u.nomUtilisateur} ${u.courriel}`.toLowerCase().includes(search.toLowerCase())
+  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / USERS_PER_PAGE));
+  const visible = filtered.slice((page - 1) * USERS_PER_PAGE, page * USERS_PER_PAGE);
 
-        setJeux((prevJeux) => prevJeux.filter((jeu) => jeu.id_jeu != id));
+  const handleDelete = (id: string) => {
+    fetch(`${API}/${id}`, { method: "DELETE", credentials: "include" })
+      .then(() => {
+        setUsers((prev) => prev.filter((u) => u._id !== id));
+        toast.success("Utilisateur supprimé");
       })
-      .catch((err) => console.error(err));
+      .catch(() => toast.error("Erreur suppression"));
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormJeu({
-      ...formJeu,
-      [name]: ["prix", "sale", "file_size", "revue_id_revue"].includes(name)
-        ? Number(value)
-        : value,
-    });
-  };
-
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    fetch(`http://localhost:4000/jeux/${formJeu?.id_jeu}/edit`, {
+    const form = Object.fromEntries(new FormData(e.currentTarget));
+    fetch(`${API}/${editing!._id}`, {
       method: "PUT",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formJeu),
+      body: JSON.stringify(form),
     })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to update jeu");
-        }
-
-        setJeux((prevJeux) =>
-          prevJeux.map((j) =>
-            j.id_jeu === formJeu?.id_jeu ? { ...j, ...formJeu } : j,
-          ),
-        );
-        setModifierJeu(null);
+      .then(() => {
+        setUsers((prev) => prev.map((u) => u._id === editing!._id ? { ...u, ...form } : u));
+        setEditing(null);
+        toast.success("Utilisateur mis à jour");
       })
-      .catch((err) => console.error(err));
+      .catch(() => toast.error("Erreur mise à jour"));
   };
 
   return (
-    <div className="container-fluid mt-4 ">
+    <div className="bg-black text-white d-flex flex-column" style={{ minHeight: "100vh" }}>
+      <Navbar />
 
-      <Navbar></Navbar>
-
-      <div className="list-group">
-        {jeux.map((jeu) => (
-          <div key={jeu.id_jeu} className="list-group-item">
-            <div className="row align-items-center">
-              <div className="col-8">
-                <h5 className="mb-1">{jeu.nom_jeu}</h5>
-                <p className="mb-1">{jeu.description}</p>
-                <small className="text-muted">{jeu.developpeur}</small>
-              </div>
-
-              <div className="col-4 justify-content-center mt-3">
-                <button
-                  className="btn btn-warning me-2"
-                  onClick={() => {
-                    setModifierJeu(jeu);
-                    setFormJeu(jeu);
-                  }}
-                >
-                  Modifier
-                </button>
-
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(jeu.id_jeu)}
-                >
-                  Supprimer
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div style={{ background: "linear-gradient(180deg,#7a0000 0%,#1a0000 50%,#000 100%)", padding: "44px 0 32px" }}>
+        <div className="container">
+          <h1 className="fw-bold text-uppercase mb-1">Panel <span className="text-danger">Administrateur</span></h1>
+          <small className="text-secondary text-uppercase" style={{ letterSpacing: 3 }}>Gestion des utilisateurs</small>
+          <br /><br />
+          <button className="btn btn-danger btn-sm rounded-4" onClick={() => navigate("/AdminPageJeux")}>
+            Gérer les jeux
+          </button>
+        </div>
       </div>
 
-      {modifierJeu && (
-        <div className="modal d-block" tabIndex={-1}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Modifier Jeu</h5>
-                <button
-                  className="btn-close"
-                  onClick={() => setModifierJeu(null)}
-                ></button>
-              </div>
+      <div className="container py-4 flex-grow-1">
+        <input
+          type="search"
+          placeholder="Rechercher..."
+          className="form-control bg-dark text-white border-secondary mb-3"
+          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+        />
 
-              <div className="modal-body">
-                <form onSubmit={handleSubmit} className="mt-4">
-                  <div className="mb-3">
-                    <label className="form-label">Nom</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="nom_jeu"
-                      value={formJeu?.nom_jeu}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Developpeur</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="developpeur"
-                      value={formJeu?.developpeur}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Date de sortie</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="date_de_sortie"
-                      value={formJeu?.date_de_sortie}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Prix</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="prix"
-                      value={formJeu?.prix}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Sale</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="sale"
-                      value={formJeu?.sale}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Description</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="description"
-                      value={formJeu?.description}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Prix</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="prix"
-                      value={formJeu?.prix}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Taile du fichier</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="file_size"
-                      value={formJeu?.file_size}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Revue id</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="Revue_id"
-                      value={formJeu?.revue_id_revue}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <button type="submit" className="btn btn-primary">
+        <table className="table table-dark table-hover">
+          <thead className="border-bottom border-danger border-opacity-25">
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Rôle</th>
+              <th style={{ width: 200 }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visible.map((user) => (
+              <tr key={user._id}>
+                <td>{user.nomUtilisateur}</td>
+                <td className="text-secondary">{user.courriel}</td>
+                <td>
+                  <span className={`badge ${user.role === "admin" ? "bg-danger" : "bg-secondary"}`}>
+                    {user.role ?? "user"}
+                  </span>
+                </td>
+                <td>
+                  <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => setEditing(user)}>
                     Modifier
                   </button>
-                </form>
+                  <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(user._id)}>
+                    Supprimer
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="d-flex justify-content-center gap-2 align-items-center">
+          <button className="btn btn-outline-secondary btn-sm" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+            Précédent
+          </button>
+          <span className="text-secondary">Page {page} / {totalPages}</span>
+          <button className="btn btn-outline-secondary btn-sm" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
+            Suivant
+          </button>
+        </div>
+      </div>
+
+      <Footer />
+
+      {editing && (
+        <div className="modal d-block" style={{ background: "rgba(0,0,0,.8)" }} onClick={() => setEditing(null)}>
+          <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content bg-dark text-white border border-danger border-opacity-25">
+              <div className="modal-header border-secondary">
+                <h5 className="modal-title">Modifier <span className="text-danger">utilisateur</span></h5>
+                <button className="btn-close btn-close-white" onClick={() => setEditing(null)} />
               </div>
+              <form onSubmit={handleSave}>
+                <div className="modal-body">
+                  <input
+                    name="nomUtilisateur"
+                    className="form-control bg-black text-white border-secondary mb-2"
+                    placeholder="Nom"
+                    defaultValue={editing.nomUtilisateur}
+                  />
+                  <input
+                    name="courriel"
+                    type="email"
+                    className="form-control bg-black text-white border-secondary"
+                    placeholder="Email"
+                    defaultValue={editing.courriel}
+                  />
+                </div>
+                <div className="modal-footer border-secondary">
+                  <button type="button" className="btn btn-outline-secondary" onClick={() => setEditing(null)}>
+                    Annuler
+                  </button>
+                  <button type="submit" className="btn btn-danger">Sauvegarder</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
