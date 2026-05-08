@@ -1,6 +1,6 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { User } from "../models/utilisateur.js";
-
+import { GameBlacklist } from "../models/jeuxBlacklist.js";
 let mongoClient: MongoClient;
 
 export async function connectToMongo(uri: string) {
@@ -19,4 +19,8 @@ export function getJwtDb(): Db {
 
 export function getUsers(): Collection<User> {
   return getJwtDb().collection("users");
+}
+
+export function getGameBlacklist() {
+  return mongoClient.db().collection<GameBlacklist>("game_blacklist");
 }
