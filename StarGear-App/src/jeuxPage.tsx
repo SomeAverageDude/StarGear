@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Navbar from "./helper/navbar";
 import Footer from "./helper/footer";
+import{toast} from "react-toastify";
+
 
 
 
@@ -88,7 +90,7 @@ export default function JeuxPage() {
     setCommentaire("");
     setNote(5);
   } else {
-    alert("Tu dois être connecté pour laisser une revue.");
+   toast.error("Tu dois être connecté pour laisser une revue.");
   }
 }
 
