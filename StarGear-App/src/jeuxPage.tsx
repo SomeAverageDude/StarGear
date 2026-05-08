@@ -13,6 +13,9 @@ type JeuIGDB = {
   screenshots: string[];
   videos: string[];
   prix: number;
+  rating: number;
+  genres: string[];
+  platforms: string[];
 };
 
 export default function JeuxPage() {
@@ -90,6 +93,20 @@ export default function JeuxPage() {
               style={{ objectFit: "cover" }}
             />
           ))}
+          {/* Infos */}
+          <div className="pt-2 ps-2 col-3" style={styleBorder}>
+            <img src={jeu.cover} alt={jeu.nom} height={350} width={280} style={{ objectFit: "cover" }} />
+            <label>
+              Par {jeu.developpeur} en {jeu.sortie}
+              <br />
+              Note: {jeu.rating}/10
+              <br />
+              Genres: {jeu.genres?.join(", ")}
+              <br />
+              Plateformes: {jeu.platforms?.join(", ")}
+              <br />{jeu.description}
+            </label>
+          </div>
         </div>
       </div>
 

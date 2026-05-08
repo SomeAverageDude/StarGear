@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -9,6 +8,12 @@ import HomePage from "./HomePage.tsx";
 import JeuxPage from "./jeuxPage.tsx";
 import PagePrincipale from "./PagePrincipale.tsx";
 import AdminPage from "./AdminPage.tsx";
+import AproposPage from "./AproposPage.tsx";
+
+
+import { ToastContainer } from "react-toastify";
+
+
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -17,10 +22,13 @@ const router = createBrowserRouter([
   { path: "/InscriptionPage", element: <InscriptionPage /> },
   { path: "/PagePrincipale", element: <PagePrincipale /> },
   { path: "/AdminPage", element: <AdminPage /> },
+  { path: "AproposPage", element: <AproposPage /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
-  </StrictMode>,
+  <> 
+     <RouterProvider router={router}></RouterProvider>
+     <ToastContainer position="top-right" autoClose={3000} theme="dark"/>
+  </>
+    
 );

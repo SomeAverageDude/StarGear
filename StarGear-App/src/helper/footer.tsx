@@ -1,15 +1,26 @@
+import { useNavigate } from "react-router";
+
 export default function Footer() {
+  const navigate = useNavigate();
+
   return (
-    <footer className="stargear-footer text-center pt-5" style={{backgroundColor:"white"}}>
+    <footer
+      className="stargear-footer text-center pt-5 bg-dark"
+      style={{
+        backgroundColor: "white",
+      }}
+    >
       <div className="container-fluid">
-        <p className="footer-text mb-3 text-dark">Découvrez plus en vous connectant!</p>
-        <a href="/SeConnecterPage" className="btn footer-btn mb-4 text-danger">Se connecter</a>
+        <p className="footer-text mb-3 text-light">
+          Découvrez plus en vous connectant!
+        </p>
+        
         <div>
           <img
             src="/src/assets/starGear.png"
             alt="StarGear"
             className="footer-logo"
-            height="150"
+            height="80"
             width="auto"
           />
         </div>
