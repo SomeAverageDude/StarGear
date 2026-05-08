@@ -1,5 +1,6 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { User } from "../models/utilisateur.js";
+import { Revue } from "../models/revue.js";
 
 let mongoClient: MongoClient;
 
@@ -19,4 +20,8 @@ export function getJwtDb(): Db {
 
 export function getUsers(): Collection<User> {
   return getJwtDb().collection("users");
+}
+
+export function getRevues(): Collection<Revue> {
+  return getJwtDb().collection("revues");
 }

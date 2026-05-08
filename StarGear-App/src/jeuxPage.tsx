@@ -3,6 +3,8 @@ import { useParams } from "react-router";
 import Navbar from "./helper/navbar";
 import Footer from "./helper/footer";
 
+
+
 type JeuIGDB = {
   igdb_id: number;
   nom: string;
@@ -15,9 +17,23 @@ type JeuIGDB = {
   prix: number;
 };
 
+type Revue = {
+  _id?: string;
+  userId: string;
+  nomUtilisateur: string;
+  jeuId: number;
+  note: number;
+  commentaire?: string;
+  date?: string;
+};
+
+
 export default function JeuxPage() {
   const { id } = useParams(); // id = igdb_id
   const [jeu, setJeu] = useState<JeuIGDB | null>(null);
+  const [revues, setRevues] = useState<Revue[]>([]);
+  const [note, setNote] = useState<number>(5);
+  const [commentaire, setCommentaire] = useState<string>("");
 
   useEffect(() => {
     
@@ -25,7 +41,14 @@ export default function JeuxPage() {
       .then(r => r.json())
       .then(setJeu)
       .catch(console.error);
-  }, [id]);
+  
+    fetch(`http://localhost:4000/revues/${id}`)
+    .then(r => r.json())
+    .then(setRevues)
+    .catch(console.error);
+    }, [id]);
+
+  
 
   const styleBackground: React.CSSProperties = {
     backgroundImage: `url(${jeu?.screenshots[0] ?? jeu?.cover})`,
@@ -38,6 +61,36 @@ export default function JeuxPage() {
     backgroundColor: "rgba(112,68,68,0.5)",
     color: "white",
   };
+
+ async function ajouterRevue() {
+  const response = await fetch("http://localhost:4000/revues", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      jeuId: Number(id),
+      note: note,
+      commentaire: commentaire,
+    }),
+  });
+
+  if (response.ok) {
+    const nouvelleRevue = await response.json();
+
+    const autresRevues = revues.filter(
+      (revue) => revue.userId !== nouvelleRevue.userId
+    );
+
+    setRevues([nouvelleRevue, ...autresRevues]);
+
+    setCommentaire("");
+    setNote(5);
+  } else {
+    alert("Tu dois être connecté pour laisser une revue.");
+  }
+}
 
   if (!jeu) return;
   return (
@@ -78,6 +131,62 @@ export default function JeuxPage() {
             </button>
           </div>
         </div>
+
+
+<div className="col-8 mt-3 mb-3">
+  <div className="p-4" style={styleBorder}>
+    <h3>Revues des joueurs</h3>
+
+    {revues.length === 0 && (
+      <p>Aucune revue pour ce jeu.</p>
+    )}
+
+   {revues.map((revue, index) => (
+  <div key={index} className="border-bottom pb-3 mb-3">
+    <strong>{revue.nomUtilisateur}</strong>
+
+    <div>Note : {revue.note}/5</div>
+
+    {revue.commentaire && (
+      <p className="mt-2">{revue.commentaire}</p>
+    )}
+  </div>
+))}
+  </div>
+</div>
+
+
+<div className="col-8 mt-3 mb-3">
+  <div className="p-4" style={styleBorder}>
+    <h3>Laisser une revue</h3>
+
+    <label>Note sur 5</label>
+    <select
+      className="form-control mb-3"
+      value={note}
+      onChange={(e) => setNote(Number(e.target.value))}
+    >
+      <option value={1}>1 / 5</option>
+      <option value={2}>2 / 5</option>
+      <option value={3}>3 / 5</option>
+      <option value={4}>4 / 5</option>
+      <option value={5}>5 / 5</option>
+    </select>
+
+    <label>Commentaire</label>
+    <textarea
+      className="form-control mb-3"
+      value={commentaire}
+      onChange={(e) => setCommentaire(e.target.value)}
+      placeholder="Écris ton commentaire..."
+    />
+
+    <button className="btn btn-dark" onClick={ajouterRevue}>
+      Envoyer la revue
+    </button>
+  </div>
+</div>
+
 
         {jeu.videos.length > 0 && (
           <div className="col-8 mb-5">
