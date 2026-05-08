@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+
 type User = {
   _id: string;
   courriel: string;
   nomUtilisateur: string;
+  role: string;
 };
 
 export default function Navbar() {
@@ -55,8 +57,16 @@ export default function Navbar() {
             À propos
           </a>
         </li>
+      {user?.role === "admin" && (
+        <li className="nav-item">
+          <a className="nav-link nav-custom text-white" href="/AdminPage">
+            Administration
+          </a>
+        </li>
+      )}
+      
       </ul>
-
+    
       <div className="ms-auto d-flex gap-2">
         {user ? (
           <>
@@ -75,10 +85,12 @@ export default function Navbar() {
                     if (data.message === "Logged out") {
                       toast.success("Déconnexion réussie !");
                       setUser(null);
+                      navigate("/")
                     } else {
                       toast.error("Erreur lors de la déconnexion");
                     }
                   });
+                  
               }}
             >
               Se déconnecter
