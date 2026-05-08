@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
 import { Router } from "express";
+import { ObjectId } from "mongodb";
+
 import {
   getUserBycourriel,
   registerUser,
@@ -12,6 +14,7 @@ import {
   createAndSaveRefreshToken,
 } from "../middleware/jwtToken.js";
 import { User } from "../models/utilisateur.js";
+import { requireAdmin } from "../middleware/requireAdmin.js";
 
 const router = Router();
 const saltRounds = 10;
@@ -32,7 +35,7 @@ router.post("/Connexion", async (req, res) => {
       return res.status(401).json({ message: "Password doesn't match" });
 
     // Create and save refresh token in a safe cookie
-    const refreshToken = await createAndSaveRefreshToken(user._id);
+    const refreshToken = await createAndSaveRefreshToken(user._id, user.role);
     if (refreshToken == null) {
       res.status(500).json({ message: "Failed to add refresh token" });
     }
@@ -82,6 +85,7 @@ router.post("/Inscription", async (req, res) => {
       mdp: mdp,
       nomUtilisateur: nomUtilisateur,
       token: "",
+      role : "user",
     };
     user.mdp = await bcrypt.hash(mdp, saltRounds);
 
@@ -96,6 +100,7 @@ router.post("/Inscription", async (req, res) => {
     // Create and save refresh token in a safe cookie
     const refreshToken = await createAndSaveRefreshToken(
       registerResult.insertedId,
+      user.role
     );
     if (refreshToken == null) {
       res
@@ -155,9 +160,53 @@ router.get("/me", authenticateToken, async (req, res) => {
     res.json({
       nomUtilisateur: user.nomUtilisateur,
       courriel: user.courriel,
+      role: user.role,
     });
   } catch (error) {
     res.status(500).json({ message: "Error" });
+  }
+});
+// GET tous les users
+router.get("/", authenticateToken,requireAdmin,async (req, res) => {
+ try {
+    const users = await getUsers().find().toArray();
+    res.json(users || []);
+  } catch (error) {
+    res.status(500).json([]);
+  }
+});
+
+// DELETE user
+router.delete("/:id",authenticateToken, requireAdmin,async (req, res) => {
+   try {
+    const { id } = req.params as { id: string };
+
+    const result = await getUsers().deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    res.json({ message: "User deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur" });
+  }
+});
+
+// UPDATE user
+router.put("/:id",authenticateToken,requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params as { id: string };
+    const { courriel, nomUtilisateur } = req.body;
+
+    await getUsers().updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: { courriel, nomUtilisateur },
+      },
+    );
+
+    res.json({ message: "User updated" });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur" });
   }
 });
 export default router;
