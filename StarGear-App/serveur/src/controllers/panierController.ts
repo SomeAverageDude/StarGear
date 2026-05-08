@@ -48,3 +48,11 @@ export async function clearPanier(
         }
     );
 }
+
+export function calculateTotalPrice(panier: Panier){
+    if (!panier.jeux || panier.jeux.length === 0) return 0;
+
+    return panier.jeux.reduce((total,jeu) => {
+        return total + (jeu.prix || 0);
+    },0);
+}

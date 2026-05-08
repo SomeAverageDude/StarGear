@@ -4,6 +4,7 @@ import {
     getPanierByUserId,
     removeGame,
     clearPanier,
+    calculateTotalPrice,
 } from "../controllers/panierController.js";
 import { getPaniers } from "../db/mongo.js";
 import { ObjectId } from "mongodb";
@@ -37,17 +38,23 @@ router.get("/recuperer",authenticateToken, async(req,res) =>{
 
         const collectionPanier = getPaniers();
 
-        const panier = getPanierByUserId(collectionPanier,userId);
+        const panier = await getPanierByUserId(collectionPanier,userId);
 
-        if (!panier){
-            res.status(200).json({
+        if (!panier) {
+            return res.status(200).json({
                 userId, 
-                jeux:[],
+                jeux: [],
+                totalPrice: 0,
                 updatedAt: new Date()
             });
         }
 
-        res.status(200).json(panier);
+        const response = {
+            ...panier, // Spreads the panier fields (userId, jeux, etc.)
+            totalPrice: calculateTotalPrice(panier)
+        };
+
+        res.status(200).json(response);
     }catch(error){
         return res.status(500).json({ message: "Database error" });
     }
