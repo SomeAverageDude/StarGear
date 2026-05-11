@@ -22,6 +22,11 @@ export function getUsers(): Collection<User> {
   return getJwtDb().collection("users");
 }
 
+<<<<<<< HEAD
 export function GetPaniers(): Collection<Panier> {
   return getJwtDb().collection("paniers");
+=======
+export function getPaniers(): Collection<Panier>{
+  return getJwtDb().collection("paniers")
+>>>>>>> ee1b7cbc067153dbd3f6535d364f59ef78ae3739
 }

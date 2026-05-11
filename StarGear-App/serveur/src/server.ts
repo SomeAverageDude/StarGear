@@ -5,7 +5,11 @@ import userRoutes from "./routes/RouteUtilisateur.js";
 import { config } from "dotenv";
 import { connectToMongo } from "./db/mongo.js";
 import igdbRoutes from "./routes/RoutesIGDB.js";
+<<<<<<< HEAD
 import panierRoutes from "./routes/RoutePanier.js";
+=======
+import panierRoutes from "./routes/RoutesPanier.js";
+>>>>>>> ee1b7cbc067153dbd3f6535d364f59ef78ae3739
 
 config();
 
@@ -24,7 +28,11 @@ app.use(cookieParser());
 
 app.use("/users", userRoutes);
 app.use("/igdb", igdbRoutes);
+<<<<<<< HEAD
 app.use("/panier", panierRoutes);
+=======
+app.use("/panier",panierRoutes);
+>>>>>>> ee1b7cbc067153dbd3f6535d364f59ef78ae3739
 
 await connectToMongo(process.env.MONGODB_URI!);
 
