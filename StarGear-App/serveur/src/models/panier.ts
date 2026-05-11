@@ -3,9 +3,7 @@ import { Jeu } from "./jeu.js";
 
 export interface Panier {
   _id?: ObjectId;
-
   userId: ObjectId;
-  jeux: Jeu[];    
-
+  jeux: Jeu[];
   updatedAt: Date;
 }

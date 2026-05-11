@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
 
-export interface Jeu{
-    _id?: ObjectId;
-    titre: string;
-    description: string;
-    prix: string;
-    genre: string;
-    imageurl: string;
+export interface Jeu {
+  _id?: ObjectId;
+  igdb_id: number;
+  nom: string;
+  description?: string;
+  cover?: string;
+  prix: number;
 }

@@ -13,6 +13,7 @@ import AdminPage from "./AdminPage.tsx";
 import AproposPage from "./AproposPage.tsx";
 import PanierPage from "./PanierPage.tsx";
 
+
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
   { path: "/Jeu/:id", element: <JeuxPage /> },
