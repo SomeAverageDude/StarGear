@@ -7,6 +7,7 @@ import { connectToMongo, getUsers } from "./db/mongo.js";
 import igdbRoutes from "./routes/RoutesIGDB.js";
 import panierRoutes from "./routes/RoutePanier.js";
 import revueRoutes from "./routes/RouteRevue.js";
+import biblioRoutes from "./routes/RouteBiblio.js";
 
 config();   
 
@@ -27,6 +28,7 @@ app.use("/users", userRoutes);
 app.use("/igdb", igdbRoutes);
 app.use("/panier", panierRoutes);
 app.use("/revues", revueRoutes);
+app.use("/bibliotheque",biblioRoutes);
 app.get("/testmongo", async (req, res) => {
   const users = await getUsers().find().toArray();
 

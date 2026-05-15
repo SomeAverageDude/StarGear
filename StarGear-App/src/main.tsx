@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import { StrictMode } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import SeConnecterPage from "./SeConnecterPage.tsx";
@@ -11,11 +12,7 @@ import AdminPage from "./AdminPage.tsx";
 import AproposPage from "./AproposPage.tsx";
 import PanierPage from "./PanierPage.tsx";
 
-
-
 import { ToastContainer } from "react-toastify";
-
-
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },

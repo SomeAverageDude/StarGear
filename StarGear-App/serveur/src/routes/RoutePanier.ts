@@ -5,7 +5,7 @@ import {
   removeGame,
   clearPanier,
 } from "../controllers/panierController.js";
-import { GetPaniers } from "../db/mongo.js";
+import { getPaniers } from "../db/mongo.js";
 import { authenticateToken } from "../middleware/jwtToken.js";
 
 
@@ -24,7 +24,7 @@ router.post("/ajouter", authenticateToken, async (req, res) => {
       return res.status(400).json({ message: "Jeu manquant" });
     }
 
-    const panierCollection = GetPaniers();
+    const panierCollection = getPaniers();
 
     const result = await registerGame(panierCollection, userId, jeu);
 
@@ -53,7 +53,7 @@ router.get("/recuperer", authenticateToken, async (req, res) => {
       return res.status(401).json({ message: "Utilisateur non connecté" });
     }
 
-    const collectionPanier = GetPaniers();
+    const collectionPanier = getPaniers();
 
     const panier = await getPanierByUserId(collectionPanier, userId);
 
@@ -85,7 +85,7 @@ router.delete("/supprimer/:igdbId", authenticateToken, async (req, res) => {
       return res.status(400).json({ message: "ID du jeu invalide" });
     }
 
-    const collectionPanier = GetPaniers();
+    const collectionPanier = getPaniers();
 
     const result = await removeGame(collectionPanier, userId, igdbId);
 
@@ -108,7 +108,7 @@ router.delete("/vider", authenticateToken, async (req, res) => {
       return res.status(401).json({ message: "Utilisateur non connecté" });
     }
 
-    const collectionPanier = GetPaniers();
+    const collectionPanier = getPaniers();
 
     const result = await clearPanier(collectionPanier, userId);
 
