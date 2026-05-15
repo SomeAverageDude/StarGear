@@ -10,7 +10,7 @@ Ouvrez le conteneur et voilà, Mongo fonctionne !
 ### Faire fonctionner le site
 Clonez le projet dans le dossier de votre choix :
 ```bash
-  git clone https://github.com/SomeAverageDude/StarGear.git
+git clone https://github.com/SomeAverageDude/StarGear.git
 ```
 Allez dans le dossier du projet :
 ```bash
@@ -27,7 +27,7 @@ npm install
 ```
 **Créez un fichier .env dans ce dossier et insérez-y les variables d'environnement.**
 
-Dans un terminal :
+Dans un terminal dans StarGear-App :
 ```bash
 npm run dev
 ```
