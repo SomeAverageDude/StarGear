@@ -50,3 +50,4 @@ http://localhost:5173/
 - Ensuite, dans le plugin sur VS Code, trouvez la section users de StarGearDB.
 - Copiez tout le document et supprimez-le ensuite.
 - Créez un nouveau document avec les informations copiées et changez le rôle user pour admin.
+- Créez autant de compte que vous voulez pour les gérer sur la page d'administration
