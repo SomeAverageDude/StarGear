@@ -5,6 +5,7 @@ import userRoutes from "./routes/RouteUtilisateur.js";
 import { config }  from "dotenv";
 import { connectToMongo, getUsers } from "./db/mongo.js";
 import igdbRoutes from "./routes/RoutesIGDB.js";
+import panierRoutes from "./routes/RoutePanier.js";
 import revueRoutes from "./routes/RouteRevue.js";
 
 config();   
@@ -21,8 +22,10 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+
 app.use("/users", userRoutes);
 app.use("/igdb", igdbRoutes);
+app.use("/panier", panierRoutes);
 app.use("/revues", revueRoutes);
 app.get("/testmongo", async (req, res) => {
   const users = await getUsers().find().toArray();
@@ -33,8 +36,6 @@ app.get("/testmongo", async (req, res) => {
 
 await connectToMongo(process.env.MONGODB_URI!);
 
-    app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-
-
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

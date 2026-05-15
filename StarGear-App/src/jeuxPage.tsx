@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import {  useParams } from "react-router";
 import Navbar from "./helper/navbar";
 import Footer from "./helper/footer";
-import{toast} from "react-toastify";
-
-
-
+import { toast } from "react-toastify";
 
 type JeuIGDB = {
   igdb_id: number;
@@ -67,41 +64,60 @@ export default function JeuxPage() {
     color: "white",
   };
 
- async function ajouterRevue() {
-  const response = await fetch("http://localhost:4000/revues", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      jeuId: Number(id),
-      note: note,
-      commentaire: commentaire,
-    }),
-  });
+ async function ajouterAuPanier() {
 
-  if (response.ok) {
-    const nouvelleRevue = await response.json();
+  const response = await fetch(
+    "http://localhost:4000/panier/ajouter",
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        jeu: {
+          igdb_id: jeu?.igdb_id,
+          nom: jeu?.nom,
+          description: jeu?.description,
+          cover: jeu?.cover,
+          prix: jeu?.prix,
+        },
+      }),
+    }
+  );
 
-    const autresRevues = revues.filter(
-      (revue) => revue.userId !== nouvelleRevue.userId
+const data = await response.json();
+
+if (response.status === 409) {
+
+  toast.warning(data.message);
+
+}
+
+else if (response.ok) {
+
+  toast.success(data.message);
+
+}
+
+  else if (response.status === 401) {
+
+    toast.error(
+      "Veuillez vous connecter pour ajouter des jeux au panier."
     );
 
-    setRevues([nouvelleRevue, ...autresRevues]);
+  }
 
-    setCommentaire("");
-    setNote(5);
-  } else {
-   toast.error("Tu dois être connecté pour laisser une revue.");
+  else {
+
+    toast.error(
+      "Une erreur est survenue lors de l'ajout du jeu au panier."
+    );
+
   }
 }
 
-  const styleScroll: React.CSSProperties = {
-    overflowY: "scroll",
-    overflowX: "hidden",
-    maxHeight: "300px",
-  };
+
 
   if (!jeu) return;
   return (
@@ -171,7 +187,8 @@ export default function JeuxPage() {
             >
               Acheter {jeu.nom} à {jeu.prix}$
             </label>
-            <button className="col-auto btn btn-primary btn-dark w-25">
+            <button className="col-auto btn btn-primary btn-dark w-25" 
+            onClick={ajouterAuPanier}>
               Ajouter au panier
             </button>
           </div>
