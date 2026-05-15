@@ -1,9 +1,18 @@
 export const IGDB_CHAMPS = `
-  fields name, summary, cover.image_id,
-         artworks.image_id, screenshots.image_id, videos.video_id,
-         involved_companies.company.name, involved_companies.developer,
-         first_release_date;
+  fields name,
+   summary,
+    cover.image_id,
+    artworks.image_id, 
+    screenshots.image_id, 
+    videos.video_id,
+    involved_companies.company.name,
+    involved_companies.developer,
+    rating,
+    genres.name,
+    platforms.name,
+    first_release_date;
 `;
+
 
 export async function igdbFetch(body: string) {
   const res = await fetch("https://api.igdb.com/v4/games", {
@@ -42,6 +51,10 @@ export function formatGame(game: any) {
     videos:      game.videos?.slice(0, 3).map((v: any) =>
                    `https://www.youtube.com/embed/${v.video_id}`
                  ) ?? [],
-    prix:        ((game.id % 40) + 9.99).toFixed(2),
+    prix:        ((game.id % 80) + 9.99).toFixed(2),
+
+    rating:      game.rating ? Math.round(game.rating)/10 : null,
+    genres:      game.genres?.map((g: any) => g.name) ?? [],
+    platforms:   game.platforms?.map((p: any) => p.name) ?? [],
   };
 }

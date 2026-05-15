@@ -1,9 +1,7 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { ToastContainer } from "react-toastify";
 import SeConnecterPage from "./SeConnecterPage.tsx";
 import InscriptionPage from "./InscriptionPage.tsx";
 import HomePage from "./HomePage.tsx";
@@ -12,6 +10,11 @@ import PagePrincipale from "./PagePrincipale.tsx";
 import AdminPage from "./AdminPage.tsx";
 import AproposPage from "./AproposPage.tsx";
 import PanierPage from "./PanierPage.tsx";
+
+
+
+import { ToastContainer } from "react-toastify";
+
 
 
 const router = createBrowserRouter([

@@ -1,6 +1,7 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { User } from "../models/utilisateur.js";
 import { Panier } from "../models/panier.js";
+import { Revue } from "../models/revue.js";
 
 let mongoClient: MongoClient;
 
@@ -22,11 +23,9 @@ export function getUsers(): Collection<User> {
   return getJwtDb().collection("users");
 }
 
-<<<<<<< HEAD
 export function GetPaniers(): Collection<Panier> {
   return getJwtDb().collection("paniers");
-=======
-export function getPaniers(): Collection<Panier>{
-  return getJwtDb().collection("paniers")
->>>>>>> ee1b7cbc067153dbd3f6535d364f59ef78ae3739
+}
+export function getRevues(): Collection<Revue> {
+  return getJwtDb().collection("revues");
 }
