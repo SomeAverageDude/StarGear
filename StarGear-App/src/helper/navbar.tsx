@@ -71,7 +71,7 @@ export default function Navbar() {
       <div className="ms-auto d-flex gap-2">
         {user ? (
           <>
-            <div className="btn btn-outline-light rounded-5">
+            <div className="btn btn-outline-light rounded-5" onClick={() => navigate("/DetailCompte")}>
               Bonjour, {user.nomUtilisateur}
             </div>
             <button

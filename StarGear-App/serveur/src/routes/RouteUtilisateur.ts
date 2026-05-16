@@ -164,4 +164,53 @@ router.get("/me", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Error" });
   }
 });
+
+router.put("/me", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user?._id;
+    const { nomUtilisateur, courriel } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Vous n'êtes pas connecté" });
+    }
+
+    // Validation
+    if (!nomUtilisateur && !courriel) {
+      return res.status(400).json({ message: "Aucun champ à mettre à jour" });
+    }
+
+    if (nomUtilisateur?.trim() === "" || courriel?.trim() === "") {
+      return res.status(400).json({ message: "Champs invalides" });
+    }
+
+    // Vérifier que le courriel n'est pas déjà utilisé par un autre utilisateur
+    if (courriel) {
+      const existe = await getUserBycourriel(getUsers(), courriel);
+      if (existe && String(existe._id) !== String(userId)) {
+        return res.status(409).json({ message: "Courriel déjà utilisé" });
+      }
+    }
+
+    const updateFields: Partial<User> = {};
+    if (nomUtilisateur) updateFields.nomUtilisateur = nomUtilisateur.trim();
+    if (courriel) updateFields.courriel = courriel.trim();
+
+    await getUsers().updateOne(
+      { _id: userId },
+      { $set: updateFields }
+    );
+
+    const updated = await getUserById(getUsers(), userId);
+    if (!updated) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    return res.json({
+      nomUtilisateur: updated.nomUtilisateur,
+      courriel: updated.courriel,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur" });
+  }
+});
 export default router;
