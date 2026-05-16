@@ -39,7 +39,7 @@ export default function SearchBar() {
       {query && (
         <div
           className="list-group mt-2 shadow"
-          style={{ backgroundColor: "#1a1a1a", position: "absolute", zIndex: 1000, width: "95%", borderRadius: "8px" }}
+          style={{ backgroundColor: "#1a1a1a", position: "absolute", zIndex: 1000, width: "100%", borderRadius: "8px" }}
         >
           {results.length === 0 ? (
             <div className="list-group-item text-muted text-center">Aucun résultat</div>
@@ -52,8 +52,8 @@ export default function SearchBar() {
                 style={{ cursor: "pointer", backgroundColor: "#1a1a1a", color: "white", borderColor: "#333" }}
               >
                 <img src={g.cover} alt={g.nom} style={{ width: "40px", height: "40px", objectFit: "cover", borderRadius: "4px" }} />
-                <span className=" text-truncate">{g.nom}</span>
-                <span className="fw-bold">{g.prix}$</span>
+                <span>{g.nom}</span>
+                <span className="fw-bold">{g.prix} $</span>
               </div>
             ))
           )}

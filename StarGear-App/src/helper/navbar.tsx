@@ -65,17 +65,6 @@ export default function Navbar() {
         </li>
       )}
       
-        <li>
-          {user ? (
-
-            <>
-
-            <a className="nav-link nav-custom text-white" href="/PanierPage">
-            Panier
-          </a>
-          </>
-        ): null}
-        </li>
       </ul>
     
       <div className="ms-auto d-flex gap-2">

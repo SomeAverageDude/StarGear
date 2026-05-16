@@ -20,14 +20,16 @@ router.get("/jeux", async (req, res) => {
       : await getBlacklistedIds(getGameBlacklist());
 
     // ── Jeux spécifiques par IDs ──
-    // Permet de récupérer des jeux spécifiques par leurs IDs
     if (req.query.ids) {
       const ids = (req.query.ids as string)
         .split(",")
         .map(Number)
         .filter(Boolean);
-      if (ids.length === 0)
+
+      if (!ids.length) {
         return res.status(400).json({ message: "IDs invalides" });
+      }
+
       const data = await igdbFetch(`
         ${IGDB_CHAMPS}
         where id = (${ids.join(",")});
@@ -48,7 +50,8 @@ router.get("/jeux", async (req, res) => {
       );
     }
 
-    const offset = Math.floor(Math.random() * 200); // pour varier les jeux proposés à chaque reload
+    const limit = Math.min(Number(req.query.limit) || 20, 50);
+    const offset = Number(req.query.offset) || 0;
 
     const query = isAdmin
       ? `
@@ -81,6 +84,7 @@ router.get("/jeux", async (req, res) => {
     res.status(500).json({ message: "Erreur IGDB" });
   }
 });
+
 // GET /igdb/jeux/:id
 router.get("/jeux/:id", async (req, res) => {
   const id = Number(req.params.id);
