@@ -4,6 +4,7 @@ import { addGame } from "../controllers/biblioController.js";
 import { getBiblio } from "../db/mongo.js";
 import { getPaniers } from "../db/mongo.js";
 import { ObjectId } from "mongodb";
+import { getLibrary } from "../controllers/biblioController.js";
 
 const router = Router();
 
@@ -46,5 +47,37 @@ try {
     }
 });
 
+//GET pour la biblio
+router.get("/", authenticateToken, async (req, res) => {
+    try {
+
+        const loggedInUser = (req as any).user;
+
+        const userObjectId = new ObjectId(loggedInUser._id);
+
+        const collection = getBiblio();
+
+        const bibliotheque = await getLibrary(
+            collection,
+            userObjectId
+        );
+
+        if (!bibliotheque) {
+            res.status(404).json({
+                error: "Bibliothèque introuvable"
+            });
+            return;
+        }
+
+        res.status(200).json(bibliotheque);
+
+    } catch (error) {
+        console.error("Erreur récupération bibliothèque", error);
+
+        res.status(500).json({
+            error: "Erreur serveur interne"
+        });
+    }
+});
 
 export default router;

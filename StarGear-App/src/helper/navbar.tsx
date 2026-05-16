@@ -57,23 +57,21 @@ export default function Navbar() {
         </li>
         <li>
           {user ? (
-
             <>
-
-            <a className="nav-link nav-custom text-white" href="/PanierPage">
-            Panier
-          </a>
-          </>
-        ): null}
+              <a className="nav-link nav-custom text-white" href="/PanierPage">
+                Panier
+              </a>
+            </>
+          ) : null}
         </li>
       </ul>
 
       <div className="ms-auto d-flex gap-2">
         {user ? (
           <>
-            <div className="btn btn-outline-light rounded-5">
+            <a className="btn btn-outline-light rounded-5" href="/Bibliotheque">
               Bonjour, {user.nomUtilisateur}
-            </div>
+            </a>
             <button
               className="btn btn-danger rounded-5"
               onClick={() => {

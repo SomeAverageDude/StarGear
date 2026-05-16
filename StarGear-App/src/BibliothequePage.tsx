@@ -1,60 +1,77 @@
 import Navbar from "./helper/navbar";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 
 type Jeux = {
-  id_jeu: number;
-  nom_jeu: string;
-  developpeur: string;
-  date_de_sortie: string;
-  prix: number;
-  sale: number;
-  description: string;
-  file_size: number;
-  revue_id_revue: number;
-};
-
-type ImagesJeux = {
-  id_image: number;
-  lien: string;
-  jeux_id_jeu: number;
+  igdb_id: number;
+  nom: string;
+  developpeur: string | null;
+  cover: string | null;
 };
 type Compte = {
-  id_compte: number;
-  username: string;
-  mot_de_passe: string;
+  _id: string;
   courriel: string;
-  Bibliotheque_id_biblio: number;
-  Panier_id_panier: number;
-}
+  nomUtilisateur: string;
+  role?: string;
+};
+type Bibliotheque = {
+  _id?: string;
+
+  userId: string;
+  jeux: number[]; // liste des IGDB IDs
+};
 
 export default function BibliothequePage() {
+  const API_IGDB = "http://localhost:4000/igdb/jeux";
+  const compteRoute = "http://localhost:4000/users/me";
+
   const [jeux, setJeux] = useState<Jeux[]>([]);
-  const [images, setImage] = useState<ImagesJeux[]>([]);
   const [compte, setCompte] = useState<Compte>();
-  const { id } = useParams();
+  const [bibliotheque, setBibliotheque] = useState<Bibliotheque>();
 
   useEffect(() => {
-    fetch(`http://localhost:4000/jeux/${id}`)
-      .then((res) => res.json())
-      .then((data) => setJeux(data))
-      .catch((err) => console.error(err));
+    const fetchBibliotheque = async () => {
+      try {
+        // 1.prendre utilisateur
+        const compteResponse = await fetch(compteRoute, {
+          credentials: "include",
+        });
+
+        const compteData = await compteResponse.json();
+
+        setCompte(compteData);
+
+        // 2.prendre bibliotheque
+        const biblioResponse = await fetch(
+          "http://localhost:4000/bibliotheque",
+          {
+            credentials: "include",
+          },
+        );
+
+        const biblioData = await biblioResponse.json();
+
+        setBibliotheque(biblioData);
+
+        // 3.prendre jeux
+        const jeuxPromises = biblioData.jeux.map((igdbId: number) =>
+          fetch(`${API_IGDB}/${igdbId}`).then((res) => res.json()),
+        );
+
+        const jeuxData = await Promise.all(jeuxPromises);
+
+        console.log("biblio", biblioData);
+        console.log("jeux", jeuxData);
+
+        setJeux(jeuxData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchBibliotheque();
   }, []);
 
-  useEffect(() => {
-    fetch(`http://localhost:4000/images/${id}`)
-      .then((res) => res.json())
-      .then((data) => setImage(data))
-      .catch((err) => console.error(err));
-  }, []);
-
-  useEffect(() => {
-    fetch(`http://localhost:4000/compte/${id}`)
-      .then((res) => res.json())
-      .then((data) => setCompte(data))
-      .catch((err) => console.error(err));
-  });
   const gradient: React.CSSProperties = {
     height: "100vh",
     background: "linear-gradient(180deg, #12171a 60%, #4c0303 100%)",
@@ -80,27 +97,34 @@ export default function BibliothequePage() {
 
       <div className="row ps-2">
         <div className="col-2 text-center text-white pt-2" style={sidebar}>
-          <button
-            className="btn btn-outline-danger btn-dark text-white"
-            style={{ width: "100%" }}
-            onClick={() => naviguate(`/Jeu/${jeux[0]?.id_jeu}`)}
-          >
-            {jeux[0]?.nom_jeu}
-          </button>
+          {jeux.map((jeu) => (
+            <button
+              key={jeu.igdb_id}
+              className="btn btn-outline-danger btn-dark text-white mb-2"
+              style={{ width: "100%" }}
+              onClick={() => naviguate(`/Jeu/${jeu.igdb_id}`)}
+            >
+              {jeu.nom}
+            </button>
+          ))}
         </div>
 
         <div className="col-10 text-start">
-          <button
-            className="btn btn-outline-danger btn-dark text-white text-start mt-3"
-            style={gameButtons}
-            onClick={() => naviguate(`/Jeu/${jeux[0]?.id_jeu}`)}
-          >
-            <img
-              src={images[0]?.lien}
-              style={{ maxWidth: "100%", height: "auto" }}
-            ></img>
-            <div className="text-center fs-3">{jeux[0]?.nom_jeu}</div>
-          </button>
+          {jeux.map((jeu) => (
+            <button
+              key={jeu.igdb_id}
+              className="btn btn-outline-danger btn-dark text-white text-center mt-3 me-3"
+              style={gameButtons}
+              onClick={() => naviguate(`/Jeu/${jeu.igdb_id}`)}
+            >
+              <img
+                src={jeu.cover ?? ""}
+                style={{ maxWidth: "100%", height: "50%" }}
+              />
+
+              <div className="text-center fs-5">{jeu.nom}</div>
+            </button>
+          ))}
         </div>
       </div>
     </div>
