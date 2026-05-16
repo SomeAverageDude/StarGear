@@ -47,9 +47,13 @@ router.post("/Connexion", async (req, res) => {
     });
 
     return res.status(201).json({ message: "Connected" });
-  } catch (error) {
-    return res.status(500).json({ message: "Database error" });
-  }
+ } catch (error) {
+  console.error("Erreur connexion :", error);
+  return res.status(500).json({
+    message: "Database error",
+    error: String(error),
+  });
+}
 });
 
 router.post("/Inscription", async (req, res) => {
@@ -118,7 +122,7 @@ router.post("/Inscription", async (req, res) => {
 
     return res.status(201).json({ message: "Inscription réussie!" });
   } catch (error) {
-    return res.status(500).json({ message: "Erreur de base de données" });
+    return res.status(500).json({ message: "Erreur de base de données"  , error: String(error)});
   }
 });
 
