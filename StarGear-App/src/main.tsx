@@ -11,6 +11,7 @@ import PagePrincipale from "./PagePrincipale.tsx";
 import AdminPage from "./AdminPage.tsx";
 import BibliothequePage from "./BibliothequePage.tsx";
 import AproposPage from "./AproposPage.tsx";
+import DetailCompte from "./DetailCompte.tsx";
 import PanierPage from "./PanierPage.tsx";
 import { ToastContainer } from "react-toastify";
 
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
   { path: "/AdminPage", element: <AdminPage /> },
   { path: "/Bibliotheque", element: <BibliothequePage /> },
   { path: "AproposPage", element: <AproposPage /> },
+  { path: "/detailCompte", element: <DetailCompte /> },
   { path: "/PanierPage", element: <PanierPage /> },
 ]);
 
