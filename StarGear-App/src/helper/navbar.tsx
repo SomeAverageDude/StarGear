@@ -57,21 +57,34 @@ export default function Navbar() {
         </li>
         <li>
           {user ? (
-
             <>
-
-            <a className="nav-link nav-custom text-white" href="/PanierPage">
-            Panier
-          </a>
-          </>
-        ): null}
+              <a className="nav-link nav-custom text-white" href="/PanierPage">
+                Panier
+              </a>
+            </>
+          ) : null}
+        </li>
+        <li>
+          {user ? (
+            <>
+              <a
+                className="nav-link nav-custom text-white"
+                href="/Bibliotheque"
+              >
+                Bibliotheque
+              </a>
+            </>
+          ) : null}
         </li>
       </ul>
 
       <div className="ms-auto d-flex gap-2">
         {user ? (
           <>
-            <div className="btn btn-outline-light rounded-5" onClick={() => navigate("/DetailCompte")}>
+            <div
+              className="btn btn-outline-light rounded-5"
+              onClick={() => navigate("/DetailCompte")}
+            >
               Bonjour, {user.nomUtilisateur}
             </div>
             <button

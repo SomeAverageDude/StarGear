@@ -23,3 +23,15 @@ export async function addGame(
 
     return result;
 }
+
+export async function getLibrary(
+    collection: Collection<Bibliotheque>,
+    userId: ObjectId
+): Promise<Bibliotheque | null> {
+
+    const bibliotheque = await collection.findOne({
+        userId: userId
+    });
+
+    return bibliotheque;
+}
