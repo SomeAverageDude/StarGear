@@ -57,7 +57,6 @@ router.get("/jeux", async (req, res) => {
         ${IGDB_CHAMPS}
         where cover.image_id != null;
         sort total_rating_count desc;
-        limit ${limit};
         offset ${offset};
       `
       : `
@@ -66,7 +65,6 @@ router.get("/jeux", async (req, res) => {
           & cover.image_id != null
           & rating_count > 50;
         sort rating_count desc;
-        limit ${limit};
         offset ${offset};
       `;
 
