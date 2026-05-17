@@ -35,9 +35,9 @@ export async function authenticateToken(
   }
 }
 
-export async function createAndSaveRefreshToken(userId: ObjectId, role: string) {
+export async function createAndSaveRefreshToken(userId: ObjectId) {
   const refreshToken = jwt.sign(
-    { id: userId , role: role },
+    { id: userId },
     process.env.REFRESH_TOKEN_SECRET as string,
     { expiresIn: "7d" },
   );
@@ -48,4 +48,3 @@ export async function createAndSaveRefreshToken(userId: ObjectId, role: string) 
 
   return refreshToken;
 }
-
