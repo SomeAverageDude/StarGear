@@ -27,6 +27,7 @@ export function getUsers(): Collection<User> {
 
 export function getGameBlacklist() {
   return mongoClient.db().collection<GameBlacklist>("game_blacklist");
+}
 export function getPaniers(): Collection<Panier> {
   return getJwtDb().collection("paniers");
 }
