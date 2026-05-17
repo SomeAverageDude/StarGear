@@ -57,20 +57,39 @@ export default function Navbar() {
             À propos
           </a>
         </li>
-      {user?.role === "admin" && (
+
         <li className="nav-item">
-          <a className="nav-link nav-custom text-white" href="/AdminPage">
-            Administration
-          </a>
+          {user?.role === "admin" && (
+            <a className="nav-link nav-custom text-white" href="/AdminPage">
+              Administration
+            </a>
+          )}
         </li>
-      )}
-      
+
+        <li className="nav-item">
+          {user && (
+            <a className="nav-link nav-custom text-white" href="/PanierPage">
+              Panier
+            </a>
+          )}
+        </li>
+
+        <li className="nav-item">
+          {user && (
+            <a className="nav-link nav-custom text-white" href="/Bibliotheque">
+              Bibliothèque
+            </a>
+          )}
+        </li>
       </ul>
-    
+
       <div className="ms-auto d-flex gap-2">
         {user ? (
           <>
-            <div className="btn btn-outline-light rounded-5">
+            <div
+              className="btn btn-outline-light rounded-5"
+              onClick={() => navigate("/DetailCompte")}
+            >
               Bonjour, {user.nomUtilisateur}
             </div>
             <button
@@ -85,12 +104,11 @@ export default function Navbar() {
                     if (data.message === "Logged out") {
                       toast.success("Déconnexion réussie !");
                       setUser(null);
-                      navigate("/")
+                      navigate("/");
                     } else {
                       toast.error("Erreur lors de la déconnexion");
                     }
                   });
-                  
               }}
             >
               Se déconnecter
