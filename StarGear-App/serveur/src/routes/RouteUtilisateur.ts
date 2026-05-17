@@ -181,15 +181,21 @@ router.delete("/:id",authenticateToken, requireAdmin,async (req, res) => {
    try {
     const { id } = req.params as { id: string };
 
-    const result = await getUsers().deleteOne({
-      _id: new ObjectId(id),
-    });
+    const userToDelete = await getUsers().findOne({ _id: new ObjectId(id) });
 
+    if (!userToDelete) {
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+    }
+
+    if (userToDelete.role === "admin") {
+      return res.status(403).json({ message: "Impossible de supprimer un administrateur" });
+    }
+
+    await getUsers().deleteOne({ _id: new ObjectId(id) });
     res.json({ message: "User deleted" });
   } catch (error) {
     res.status(500).json({ message: "Erreur" });
-  }
-});
+}});
 
 // UPDATE user
 router.put("/:id",authenticateToken,requireAdmin, async (req, res) => {

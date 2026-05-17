@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -25,8 +24,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  <>
     <RouterProvider router={router}></RouterProvider>
      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
-  </StrictMode>,
+  </>,
 );
