@@ -5,6 +5,7 @@ import userRoutes from "./routes/RouteUtilisateur.js";
 import { config }  from "dotenv";
 import { connectToMongo, getUsers } from "./db/mongo.js";
 import igdbRoutes from "./routes/RoutesIGDB.js";
+import  adminRoutes from "./routes/RoutesAdmin.js";
 import panierRoutes from "./routes/RoutePanier.js";
 import revueRoutes from "./routes/RouteRevue.js";
 import biblioRoutes from "./routes/RouteBiblio.js";
@@ -21,11 +22,13 @@ app.use(
   }),
 );
 
+
 app.use(express.json());
 app.use(cookieParser());
 
 app.use("/users", userRoutes);
 app.use("/igdb", igdbRoutes);
+app.use("/admin", adminRoutes);
 app.use("/panier", panierRoutes);
 app.use("/revues", revueRoutes);
 app.use("/bibliotheque",biblioRoutes);

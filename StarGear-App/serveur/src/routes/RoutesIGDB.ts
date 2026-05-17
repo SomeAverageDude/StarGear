@@ -5,25 +5,43 @@ import {
   IGDB_CHAMPS,
 } from "../controllers/IgdbController.js";
 
+import { getBlacklistedIds } from "../controllers/gameBlacklistController.js";
+import { getGameBlacklist } from "../db/mongo.js";
+
 const router = Router();
 
 // GET /igdb/jeux
 router.get("/jeux", async (req, res) => {
   try {
-    // Permet de récupérer des jeux spécifiques par leurs IDs
+    const isAdmin = req.query.admin === "true";
+
+    const blacklisted = isAdmin
+      ? []
+      : await getBlacklistedIds(getGameBlacklist());
+
+    // ── Jeux spécifiques par IDs ──
     if (req.query.ids) {
       const ids = (req.query.ids as string)
         .split(",")
         .map(Number)
         .filter(Boolean);
-      if (ids.length === 0)
+
+      if (!ids.length) {
         return res.status(400).json({ message: "IDs invalides" });
+      }
+
       const data = await igdbFetch(`
         ${IGDB_CHAMPS}
         where id = (${ids.join(",")});
         limit ${ids.length};
       `);
-      const map = new Map(data.map((g: any) => [g.id, g]));
+
+      const filtered = data.filter(
+        (g: any) => !blacklisted.includes(g.id),
+      );
+
+      const map = new Map(filtered.map((g: any) => [g.id, g]));
+
       return res.json(
         ids
           .map((id) => map.get(id))
@@ -34,20 +52,30 @@ router.get("/jeux", async (req, res) => {
 
     const offset = Math.floor(Math.random() * 200); // pour varier les jeux proposés à chaque reload
 
-    const data = await igdbFetch(`
-      ${IGDB_CHAMPS}
-      where cover.image_id != null
-        & screenshots.image_id != null
-        & rating_count > 750;
-      limit 20;
-      offset ${offset};
-    `);
+    const query = isAdmin
+      ? `
+        ${IGDB_CHAMPS}
+        where cover.image_id != null;
+        sort total_rating_count desc;
+        offset ${offset};
+      `
+      : `
+        ${IGDB_CHAMPS}
+        where rating > 75
+          & cover.image_id != null
+          & rating_count > 50;
+        sort rating_count desc;
+        offset ${offset};
+      `;
 
-    if (data.length === 0) {
-      return res.status(500).json({ message: "Aucun jeu trouvé" });
-    }
+    const data = await igdbFetch(query);
 
-    res.json(data.map(formatGame));
+    // ── Filtrage blacklist côté backend ──
+    const filtered = data.filter(
+      (g: any) => !blacklisted.includes(g.id),
+    );
+
+    res.json(filtered.map(formatGame));
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Erreur IGDB" });
@@ -56,6 +84,10 @@ router.get("/jeux", async (req, res) => {
 // GET /igdb/jeux/:id
 router.get("/jeux/:id", async (req, res) => {
   const id = Number(req.params.id);
+  const blacklisted = await getBlacklistedIds(getGameBlacklist());
+  if (blacklisted.includes(id)) {
+    return res.status(404).json({ message: "Jeu introuvable" });
+  }
   if (isNaN(id)) return res.status(400).json({ message: "ID invalide" });
 
   try {
@@ -74,21 +106,34 @@ router.get("/jeux/:id", async (req, res) => {
 
 // GET /igdb/search?q=jeu+name
 router.get("/search", async (req, res) => {
+  const isAdmin = req.query.admin === "true";
+
+  const blacklisted = isAdmin
+    ? []
+    : await getBlacklistedIds(getGameBlacklist());
+
   const q = (req.query.q as string)?.trim();
-  if (!q) return res.status(400).json({ message: "Paramètre 'q' requis" });
+
+  if (!q) {
+    return res.status(400).json({ message: "Paramètre 'q' requis" });
+  }
 
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
 
   try {
     const data = await igdbFetch(`
-      search "${q.replace(/"/g, "")}";
-      ${IGDB_CHAMPS}
-      where cover.image_id != null;
-      limit ${limit};
-      offset ${offset};
-    `);
-    res.json(data.map(formatGame));
+  search "${q.replace(/"/g, "")}";
+  ${IGDB_CHAMPS}
+  where cover.image_id != null;
+  limit ${limit};
+  offset ${offset};
+`);
+
+    // Filtre les jeux blacklistés    
+    const filtered = data.filter((g: any) => !blacklisted.includes(g.id));
+
+    res.json(filtered.map(formatGame));
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Erreur IGDB" });

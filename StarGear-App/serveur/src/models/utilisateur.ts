@@ -6,4 +6,5 @@ export interface User {
   mdp: string;
   nomUtilisateur?: string;
   token?: string;
+  role: "user" | "admin";
 }
