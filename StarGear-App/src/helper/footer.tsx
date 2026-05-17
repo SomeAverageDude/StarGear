@@ -1,7 +1,5 @@
-import { useNavigate } from "react-router";
 
 export default function Footer() {
-  const navigate = useNavigate();
 
   return (
     <footer

@@ -50,8 +50,7 @@ router.get("/jeux", async (req, res) => {
       );
     }
 
-    const limit = Math.min(Number(req.query.limit) || 20, 50);
-    const offset = Number(req.query.offset) || 0;
+    const offset = Math.floor(Math.random() * 200); // pour varier les jeux proposés à chaque reload
 
     const query = isAdmin
       ? `
@@ -84,7 +83,6 @@ router.get("/jeux", async (req, res) => {
     res.status(500).json({ message: "Erreur IGDB" });
   }
 });
-
 // GET /igdb/jeux/:id
 router.get("/jeux/:id", async (req, res) => {
   const id = Number(req.params.id);
