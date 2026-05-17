@@ -61,6 +61,12 @@ export default function JeuxPage() {
     color: "white",
   };
 
+  const styleScroll: React.CSSProperties = {
+    overflowY: "scroll",
+    overflowX: "hidden",
+    maxHeight: "300px",
+  };
+
   async function ajouterAuPanier() {
     const response = await fetch("http://localhost:4000/panier/ajouter", {
       method: "POST",
@@ -118,7 +124,7 @@ export default function JeuxPage() {
       setCommentaire("");
       setNote(5);
     } else {
-      alert("Tu dois être connecté pour laisser une revue.");
+      toast.error("Tu dois être connecté pour laisser une revue.");
     }
   }
 
@@ -147,7 +153,7 @@ export default function JeuxPage() {
               className="w-100"
               style={{ objectFit: "cover", maxHeight: "200px" }}
             ></img>
-            <div>
+            <div style={styleScroll}>
               <p>
                 Par {jeu.developpeur} en {jeu.sortie}
               </p>
