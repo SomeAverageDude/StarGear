@@ -24,15 +24,24 @@ export default function AdminUsersPage() {
   useEffect(() => {
     fetch(API, { credentials: "include" })
       .then((r) => r.json())
-      .then((data) => Array.isArray(data) ? setUsers(data) : toast.error(data.message ?? "Erreur"))
+      .then((data) =>
+        Array.isArray(data)
+          ? setUsers(data)
+          : toast.error(data.message ?? "Erreur"),
+      )
       .catch(() => toast.error("Erreur réseau"));
   }, []);
 
   const filtered = users.filter((u) =>
-    `${u.nomUtilisateur} ${u.courriel}`.toLowerCase().includes(search.toLowerCase())
+    `${u.nomUtilisateur} ${u.courriel}`
+      .toLowerCase()
+      .includes(search.toLowerCase()),
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / USERS_PER_PAGE));
-  const visible = filtered.slice((page - 1) * USERS_PER_PAGE, page * USERS_PER_PAGE);
+  const visible = filtered.slice(
+    (page - 1) * USERS_PER_PAGE,
+    page * USERS_PER_PAGE,
+  );
 
   const handleDelete = (id: string) => {
     fetch(`${API}/${id}`, { method: "DELETE", credentials: "include" })
@@ -53,7 +62,9 @@ export default function AdminUsersPage() {
       body: JSON.stringify(form),
     })
       .then(() => {
-        setUsers((prev) => prev.map((u) => u._id === editing!._id ? { ...u, ...form } : u));
+        setUsers((prev) =>
+          prev.map((u) => (u._id === editing!._id ? { ...u, ...form } : u)),
+        );
         setEditing(null);
         toast.success("Utilisateur mis à jour");
       })
@@ -61,15 +72,35 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="bg-black text-white d-flex flex-column" style={{ minHeight: "100vh" }}>
+    <div
+      className="bg-black text-white d-flex flex-column"
+      style={{ minHeight: "100vh" }}
+    >
       <Navbar />
 
-      <div style={{ background: "linear-gradient(180deg,#7a0000 0%,#1a0000 50%,#000 100%)", padding: "44px 0 32px" }}>
+      <div
+        style={{
+          background:
+            "linear-gradient(180deg,#7a0000 0%,#1a0000 50%,#000 100%)",
+          padding: "44px 0 32px",
+        }}
+      >
         <div className="container">
-          <h1 className="fw-bold text-uppercase mb-1">Panel <span className="text-danger">Administrateur</span></h1>
-          <small className="text-secondary text-uppercase" style={{ letterSpacing: 3 }}>Gestion des utilisateurs</small>
-          <br /><br />
-          <button className="btn btn-danger btn-sm rounded-4" onClick={() => navigate("/AdminPageJeux")}>
+          <h1 className="fw-bold text-uppercase mb-1">
+            Panel <span className="text-danger">Administrateur</span>
+          </h1>
+          <small
+            className="text-secondary text-uppercase"
+            style={{ letterSpacing: 3 }}
+          >
+            Gestion des utilisateurs
+          </small>
+          <br />
+          <br />
+          <button
+            className="btn btn-danger btn-sm rounded-4"
+            onClick={() => navigate("/AdminPageJeux")}
+          >
             Gérer les jeux
           </button>
         </div>
@@ -80,7 +111,10 @@ export default function AdminUsersPage() {
           type="search"
           placeholder="Rechercher..."
           className="form-control bg-dark text-white border-secondary mb-3"
-          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
         />
 
         <table className="table table-dark table-hover">
@@ -98,15 +132,29 @@ export default function AdminUsersPage() {
                 <td>{user.nomUtilisateur}</td>
                 <td className="text-secondary">{user.courriel}</td>
                 <td>
-                  <span className={`badge ${user.role === "admin" ? "bg-danger" : "bg-secondary"}`}>
+                  <span
+                    className={`badge ${user.role === "admin" ? "bg-danger" : "bg-secondary"}`}
+                  >
                     {user.role ?? "user"}
                   </span>
                 </td>
                 <td>
-                  <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => setEditing(user)}>
+                  <button
+                    className="btn btn-sm btn-outline-secondary me-2"
+                    onClick={() => setEditing(user)}
+                  >
                     Modifier
                   </button>
-                  <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(user._id)}>
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => handleDelete(user._id)}
+                    disabled={user.role === "admin"}
+                    title={
+                      user.role === "admin"
+                        ? "Impossible de supprimer un administrateur"
+                        : "Supprimer l'utilisateur"
+                    }
+                  >
                     Supprimer
                   </button>
                 </td>
@@ -116,11 +164,21 @@ export default function AdminUsersPage() {
         </table>
 
         <div className="d-flex justify-content-center gap-2 align-items-center">
-          <button className="btn btn-outline-secondary btn-sm" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+          <button
+            className="btn btn-outline-secondary btn-sm"
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
             Précédent
           </button>
-          <span className="text-secondary">Page {page} / {totalPages}</span>
-          <button className="btn btn-outline-secondary btn-sm" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
+          <span className="text-secondary">
+            Page {page} / {totalPages}
+          </span>
+          <button
+            className="btn btn-outline-secondary btn-sm"
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
             Suivant
           </button>
         </div>
@@ -129,12 +187,24 @@ export default function AdminUsersPage() {
       <Footer />
 
       {editing && (
-        <div className="modal d-block" style={{ background: "rgba(0,0,0,.8)" }} onClick={() => setEditing(null)}>
-          <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="modal d-block"
+          style={{ background: "rgba(0,0,0,.8)" }}
+          onClick={() => setEditing(null)}
+        >
+          <div
+            className="modal-dialog modal-dialog-centered"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="modal-content bg-dark text-white border border-danger border-opacity-25">
               <div className="modal-header border-secondary">
-                <h5 className="modal-title">Modifier <span className="text-danger">utilisateur</span></h5>
-                <button className="btn-close btn-close-white" onClick={() => setEditing(null)} />
+                <h5 className="modal-title">
+                  Modifier <span className="text-danger">utilisateur</span>
+                </h5>
+                <button
+                  className="btn-close btn-close-white"
+                  onClick={() => setEditing(null)}
+                />
               </div>
               <form onSubmit={handleSave}>
                 <div className="modal-body">
@@ -153,10 +223,16 @@ export default function AdminUsersPage() {
                   />
                 </div>
                 <div className="modal-footer border-secondary">
-                  <button type="button" className="btn btn-outline-secondary" onClick={() => setEditing(null)}>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => setEditing(null)}
+                  >
                     Annuler
                   </button>
-                  <button type="submit" className="btn btn-danger">Sauvegarder</button>
+                  <button type="submit" className="btn btn-danger">
+                    Sauvegarder
+                  </button>
                 </div>
               </form>
             </div>
