@@ -25,7 +25,7 @@ Ensuite, installez les dépendances du serveur :
 cd .\serveur\
 npm install
 ```
-**Créez un fichier .env dans ce dossier et insérez-y les variables d'environnement.**
+**Créez un fichier .env dans ce dossier et insérez-y les variables d'environnement envoyées sur Teams.**
 
 Dans un terminal dans StarGear-App :
 ```bash
